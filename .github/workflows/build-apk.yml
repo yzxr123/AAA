@@ -2,6 +2,12 @@ name: Build 去你的广告 B7.5
 
 on:
   workflow_dispatch:
+    inputs:
+      source_path:
+        description: '源码 ZIP 或目录路径 留空自动识别'
+        required: false
+        default: ''
+        type: string
   push:
     branches:
       - main
@@ -19,38 +25,223 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Unpack complete source ZIP when uploaded
+      - name: Prepare and verify B7.5 sources
+        id: prepare
         shell: bash
+        env:
+          SOURCE_PATH: ${{ inputs.source_path }}
         run: |
-          python3 - <<'PYUPLOAD'
+          set -euo pipefail
+          python3 -u - <<'PYUPLOAD' 2>&1 | tee source-prepare.log
           from pathlib import Path, PurePosixPath
+          import hashlib
+          import os
+          import re
+          import shutil
+          import stat
+          import tempfile
           import zipfile
-          archive = Path('Qunideguanggao_B7_5_source.zip')
-          if not archive.is_file():
-              print('Using files already present in the repository')
-          else:
-              root = Path.cwd().resolve()
-              with zipfile.ZipFile(archive) as z:
-                  prefix = 'Qunideguanggao_B7_5/'
-                  source = z.read(prefix + 'app/build.gradle').decode('utf-8')
-                  if "versionName '0.7.5-b7.5'" not in source:
-                      raise SystemExit('Uploaded source ZIP is not B7.5')
-                  for item in z.infolist():
-                      if item.is_dir():
-                          continue
-                      if not item.filename.startswith(prefix):
-                          raise SystemExit('Unexpected source ZIP layout')
-                      rel = PurePosixPath(item.filename[len(prefix):])
-                      if rel.is_absolute() or '..' in rel.parts or not rel.parts:
-                          raise SystemExit('Unsafe source ZIP path')
-                      target = (root / str(rel)).resolve()
-                      if not target.is_relative_to(root) or '.git' in rel.parts:
-                          raise SystemExit('Unsafe source ZIP destination')
-                      if (item.external_attr >> 16) & 0o170000 == 0o120000:
-                          raise SystemExit('Symlinks are not accepted in source ZIP')
+
+          ROOT = Path(os.environ.get('GITHUB_WORKSPACE', '.')).resolve()
+          VERSION = '0.7.5-b7.5'
+          REQUIRED = (
+              'settings.gradle', 'build.gradle', 'gradle.properties', 'app/build.gradle',
+              'app/src/main/AndroidManifest.xml', 'gkd-core/build.gradle', 'dev-signing.jks',
+              'tools/clean_legacy_sources.py', 'tools/validate_project.py',
+              'tools/build_gkd_bundle.py', 'tools/prepare_gkd_selector.py',
+              'tools/fetch_ocr_data.py', 'app/src/main/assets/gkd/manifest.json',
+              'app/src/main/assets/ltt/AllRules.json',
+              'app/src/main/assets/ltt/BasicRules.json',
+              'app/src/main/assets/ltt/ExtendedRules.json',
+              'tests/test_subscription_bundle.py',
+          )
+          SKIP = {'.git', '.gradle', '.idea', '__pycache__', '__MACOSX', 'node_modules', 'build', 'dist'}
+          MAX_BYTES = 256 * 1024 * 1024
+
+
+          def fail(message):
+              raise SystemExit('ERROR: B7.5 source preparation: ' + message)
+
+
+          def matches(content):
+              text = content.decode('utf-8-sig')
+              return (re.search(r'\bversionName\s*(?:=\s*)?[\'"]' + re.escape(VERSION) + r'[\'"]', text)
+                      and re.search(r'\bversionCode\s*(?:=\s*)?25\b', text))
+
+
+          def files_below(folder):
+              for base, dirs, names in os.walk(folder, followlinks=False):
+                  current = Path(base)
+                  dirs[:] = sorted(d for d in dirs if d not in SKIP and not (current / d).is_symlink())
+                  for name in sorted(names):
+                      path = current / name
+                      if not path.is_symlink():
+                          yield path
+
+
+          def inside_checkout(value):
+              selected = (ROOT / value).resolve()
+              if not selected.is_relative_to(ROOT):
+                  fail('source_path must stay inside this checkout')
+              if not selected.exists():
+                  fail('source_path does not exist: ' + value)
+              return selected
+
+
+          def zip_members(archive, prefix):
+              members = {}
+              total = 0
+              for item in archive.infolist():
+                  if item.is_dir() or not item.filename.startswith(prefix):
+                      continue
+                  raw = item.filename[len(prefix):]
+                  relative = PurePosixPath(raw)
+                  if (not raw or '\\' in raw or ':' in raw or relative.is_absolute()
+                          or '..' in relative.parts or '.git' in relative.parts
+                          or str(relative) != raw or '\n' in raw or '\r' in raw):
+                      fail('unsafe ZIP path: ' + repr(raw))
+                  kind = stat.S_IFMT(item.external_attr >> 16)
+                  if kind not in (0, stat.S_IFREG):
+                      fail('ZIP links and special files are not accepted: ' + repr(raw))
+                  if item.flag_bits & 1:
+                      fail('encrypted ZIP entries are not accepted')
+                  if raw in members:
+                      fail('duplicate ZIP entry: ' + repr(raw))
+                  total += item.file_size
+                  if total > MAX_BYTES or len(members) >= 20000:
+                      fail('source ZIP exceeds the extraction limit')
+                  members[raw] = item
+              missing = [name for name in REQUIRED if name not in members or members[name].file_size == 0]
+              if missing:
+                  fail('incomplete source ZIP ' + str(archive.filename) + '\nMissing: ' + ', '.join(missing))
+              return members
+
+
+          def inspect_zip(path):
+              if not zipfile.is_zipfile(path):
+                  return None
+              with zipfile.ZipFile(path) as archive:
+                  prefixes = []
+                  for item in archive.infolist():
+                      if item.filename == 'app/build.gradle' or item.filename.endswith('/app/build.gradle'):
+                          if item.file_size > 1024 * 1024:
+                              fail('unexpectedly large app/build.gradle in ' + str(path))
+                          if matches(archive.read(item)):
+                              prefixes.append(item.filename[:-len('app/build.gradle')])
+                  if not prefixes:
+                      return None
+                  if len(prefixes) != 1:
+                      fail('multiple B7.5 projects inside ZIP: ' + str(path))
+                  zip_members(archive, prefixes[0])
+                  return prefixes[0]
+
+
+          def missing_in(folder):
+              return [name for name in REQUIRED if not (folder / name).is_file() or (folder / name).stat().st_size == 0]
+
+
+          def digest(path):
+              result = hashlib.sha256()
+              with path.open('rb') as stream:
+                  for block in iter(lambda: stream.read(1024 * 1024), b''):
+                      result.update(block)
+              return result.hexdigest()
+
+
+          print('===== B7.5 source preparation =====', flush=True)
+          print('Checkout: ' + str(ROOT), flush=True)
+          explicit = os.environ.get('SOURCE_PATH', '').strip()
+          selected = inside_checkout(explicit) if explicit else None
+          all_files = list(files_below(ROOT)) if selected is None else []
+          archive_paths = ([selected] if selected is not None and selected.is_file()
+                           else ([] if selected is not None else [p for p in all_files if p.suffix.lower() == '.zip']))
+          print('ZIP files found: ' + str(len(archive_paths)), flush=True)
+          archives = []
+          for path in archive_paths:
+              print('Inspecting ZIP: ' + str(path.relative_to(ROOT)), flush=True)
+              prefix = inspect_zip(path)
+              if prefix is not None:
+                  archives.append((path, prefix, digest(path)))
+              else:
+                  print('Not a complete B7.5 ZIP: ' + str(path.relative_to(ROOT)), flush=True)
+
+          if selected is not None and selected.is_file() and not archives:
+              fail('selected file is not a B7.5 source ZIP: ' + explicit)
+
+          unique_archives = {}
+          for row in archives:
+              unique_archives.setdefault(row[2], row)
+          if len(unique_archives) > 1:
+              fail('multiple different B7.5 ZIP files found\n'
+                   + '\n'.join(str(row[0].relative_to(ROOT)) for row in unique_archives.values())
+                   + '\nKeep one source ZIP or set source_path in Run workflow')
+
+          archive_choice = next(iter(unique_archives.values()), None)
+          source_folder = None
+          if archive_choice is None:
+              candidates = []
+              incomplete = []
+              locations = [selected] if selected is not None else [p.parent.parent for p in all_files
+                  if p.name == 'build.gradle' and p.parent.name == 'app']
+              for folder in locations:
+                  build = folder / 'app/build.gradle'
+                  if build.is_file() and matches(build.read_bytes()):
+                      missing = missing_in(folder)
+                      if missing:
+                          incomplete.append(str(folder.relative_to(ROOT)) + ': ' + ', '.join(missing))
+                      else:
+                          candidates.append(folder)
+              if not candidates:
+                  fail('no complete B7.5 source found\n'
+                       + ('Incomplete folders: ' + '\n'.join(incomplete) + '\n' if incomplete else '')
+                       + 'Upload Qunideguanggao_B7_5_source.zip with this workflow in the same branch\n'
+                       + 'Do not re-run an old failed commit; start Run workflow on the updated branch')
+              if len(candidates) != 1:
+                  fail('multiple complete B7.5 source folders found; set source_path in Run workflow\n'
+                       + '\n'.join(str(p.relative_to(ROOT)) for p in candidates))
+              source_folder = candidates[0]
+
+          runner = Path(os.environ.get('RUNNER_TEMP', tempfile.gettempdir())).resolve()
+          runner.mkdir(parents=True, exist_ok=True)
+          if runner.is_relative_to(ROOT):
+              fail('RUNNER_TEMP must be outside the source checkout')
+          project = Path(tempfile.mkdtemp(prefix='qunideguanggao-b7-5-', dir=runner))
+          if archive_choice is not None:
+              archive_path, prefix, sha256 = archive_choice
+              print('Selected ZIP: ' + str(archive_path.relative_to(ROOT)), flush=True)
+              print('Source ZIP SHA256: ' + sha256, flush=True)
+              with zipfile.ZipFile(archive_path) as archive:
+                  for relative, item in zip_members(archive, prefix).items():
+                      target = project / relative
                       target.parent.mkdir(parents=True, exist_ok=True)
-                      target.write_bytes(z.read(item))
-              print('Complete B7.5 source ZIP extracted')
+                      with archive.open(item) as source, target.open('wb') as destination:
+                          shutil.copyfileobj(source, destination)
+                      target.chmod(0o755 if (item.external_attr >> 16) & 0o111 else 0o644)
+          else:
+              print('Selected source folder: ' + str(source_folder.relative_to(ROOT)), flush=True)
+              for path in files_below(source_folder):
+                  if path.suffix.lower() == '.zip' or path.name == 'source-prepare.log':
+                      continue
+                  target = project / path.relative_to(source_folder)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(path, target)
+
+          active_workflow = ROOT / '.github/workflows/build-apk.yml'
+          if active_workflow.is_file():
+              target = project / '.github/workflows/build-apk.yml'
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(active_workflow, target)
+          missing = missing_in(project)
+          if missing:
+              fail('prepared source is incomplete: ' + ', '.join(missing))
+          if not matches((project / 'app/build.gradle').read_bytes()):
+              fail('prepared source version is not B7.5')
+          (project / 'dist').mkdir(exist_ok=True)
+          print('Build directory: ' + str(project), flush=True)
+          print('Verified: tools/clean_legacy_sources.py', flush=True)
+          print('B7.5 source preparation passed', flush=True)
+          with Path(os.environ['GITHUB_OUTPUT']).open('a', encoding='utf-8') as output:
+              output.write('project_dir=' + str(project) + '\n')
           PYUPLOAD
 
       - name: Setup JDK 17
@@ -66,6 +257,7 @@ jobs:
           cache-disabled: true
 
       - name: Build 去你的广告 B7.5
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         id: assemble
         shell: bash
         run: |
@@ -128,26 +320,38 @@ jobs:
       - name: Publish failure diagnostics
         if: failure()
         shell: bash
+        env:
+          PROJECT_DIR: ${{ steps.prepare.outputs.project_dir }}
         run: |
           echo "### 去你的广告 B7.5 build failure" >> "$GITHUB_STEP_SUMMARY"
-          if [ -f dist/ci-build.log ]; then
-            echo '```text' >> "$GITHUB_STEP_SUMMARY"
-            tail -n 420 dist/ci-build.log >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "Failure happened before project build started" >> "$GITHUB_STEP_SUMMARY"
-          fi
+          for LOG in source-prepare.log "${PROJECT_DIR:-/nonexistent}/dist/ci-build.log"; do
+            if [ -f "$LOG" ]; then
+              echo '```text' >> "$GITHUB_STEP_SUMMARY"
+              tail -n 420 "$LOG" >> "$GITHUB_STEP_SUMMARY"
+              echo '```' >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
 
-      - name: Upload failure log
+      - name: Upload source preparation log
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          path: dist/ci-build.log
+          path: source-prepare.log
+          if-no-files-found: ignore
+          archive: false
+          retention-days: 7
+
+      - name: Upload failure log
+        if: failure() && steps.prepare.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.prepare.outputs.project_dir }}/dist/ci-build.log
           if-no-files-found: ignore
           archive: false
           retention-days: 7
 
       - name: Run Release lint diagnostics
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: success()
         id: lint
         continue-on-error: true
@@ -161,6 +365,7 @@ jobs:
             2>&1 | tee dist/lint-release.log
 
       - name: Report lint diagnostics
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: always() && steps.assemble.outcome == 'success'
         shell: bash
         run: |
@@ -175,12 +380,14 @@ jobs:
           fi
 
       - name: Prepare APK
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: success()
         shell: bash
         run: |
           cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.5.apk
 
       - name: Analyze APK contents
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: success()
         shell: bash
         run: |
@@ -218,6 +425,7 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Report and enforce APK size
+        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: success()
         shell: bash
         run: |
@@ -236,7 +444,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: dist/Qunideguanggao-B7.5.apk
+          path: ${{ steps.prepare.outputs.project_dir }}/dist/Qunideguanggao-B7.5.apk
           if-no-files-found: error
           archive: false
           retention-days: 7
@@ -245,7 +453,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: dist/apk-size-report.txt
+          path: ${{ steps.prepare.outputs.project_dir }}/dist/apk-size-report.txt
           if-no-files-found: error
           archive: false
           retention-days: 7
