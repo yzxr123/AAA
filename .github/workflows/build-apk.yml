@@ -1,4 +1,4 @@
-name: Build 去你的广告 B7.4
+name: Build 去你的广告 B7.5
 
 on:
   workflow_dispatch:
@@ -25,16 +25,16 @@ jobs:
           python3 - <<'PYUPLOAD'
           from pathlib import Path, PurePosixPath
           import zipfile
-          archive = Path('Qunideguanggao_B7_4_source.zip')
+          archive = Path('Qunideguanggao_B7_5_source.zip')
           if not archive.is_file():
               print('Using files already present in the repository')
           else:
               root = Path.cwd().resolve()
               with zipfile.ZipFile(archive) as z:
-                  prefix = 'Qunideguanggao_B7_4/'
+                  prefix = 'Qunideguanggao_B7_5/'
                   source = z.read(prefix + 'app/build.gradle').decode('utf-8')
-                  if "versionName '0.7.4-b7.4'" not in source:
-                      raise SystemExit('Uploaded source ZIP is not B7.4')
+                  if "versionName '0.7.5-b7.5'" not in source:
+                      raise SystemExit('Uploaded source ZIP is not B7.5')
                   for item in z.infolist():
                       if item.is_dir():
                           continue
@@ -50,7 +50,7 @@ jobs:
                           raise SystemExit('Symlinks are not accepted in source ZIP')
                       target.parent.mkdir(parents=True, exist_ok=True)
                       target.write_bytes(z.read(item))
-              print('Complete B7.4 source ZIP extracted')
+              print('Complete B7.5 source ZIP extracted')
           PYUPLOAD
 
       - name: Setup JDK 17
@@ -65,14 +65,14 @@ jobs:
           gradle-version: '8.13'
           cache-disabled: true
 
-      - name: Build 去你的广告 B7.4
+      - name: Build 去你的广告 B7.5
         id: assemble
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p dist
           {
-            echo "===== 去你的广告 B7.4 CI ====="
+            echo "===== 去你的广告 B7.5 CI ====="
             echo "UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             echo "Commit: $GITHUB_SHA"
             echo "Java: $(java -version 2>&1 | head -1)"
@@ -91,7 +91,7 @@ jobs:
             test -f app/src/main/java/org/adguardian/app/engine/GkdAssistEngine.java
             test -f app/src/main/java/org/adguardian/app/ocr/OcrAdDetector.java
             test -f app/src/main/java/org/adguardian/app/ocr/OcrFallbackController.java
-            grep -F "versionName '0.7.4-b7.4'" app/build.gradle
+            grep -F "versionName '0.7.5-b7.5'" app/build.gradle
             grep -F "Tesseract4Android:tesseract4android:4.9.0" app/build.gradle
             grep -F "abiFilters 'arm64-v8a'" app/build.gradle
             grep -F "去你的广告" app/src/main/res/values/strings.xml
@@ -100,7 +100,7 @@ jobs:
             python3 tools/build_gkd_bundle.py --check
             python3 tools/prepare_gkd_selector.py --check
             python3 -m unittest discover -s tests -p 'test_*.py' -v
-            echo "B7.4 source layout verified"
+            echo "B7.5 source layout verified"
 
             SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
             echo "===== Android SDK ====="
@@ -129,7 +129,7 @@ jobs:
         if: failure()
         shell: bash
         run: |
-          echo "### 去你的广告 B7.4 build failure" >> "$GITHUB_STEP_SUMMARY"
+          echo "### 去你的广告 B7.5 build failure" >> "$GITHUB_STEP_SUMMARY"
           if [ -f dist/ci-build.log ]; then
             echo '```text' >> "$GITHUB_STEP_SUMMARY"
             tail -n 420 dist/ci-build.log >> "$GITHUB_STEP_SUMMARY"
@@ -178,7 +178,7 @@ jobs:
         if: success()
         shell: bash
         run: |
-          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.4.apk
+          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.5.apk
 
       - name: Analyze APK contents
         if: success()
@@ -189,7 +189,7 @@ jobs:
           import json
           import zipfile
           from pathlib import Path
-          apk = Path('dist/Qunideguanggao-B7.4.apk')
+          apk = Path('dist/Qunideguanggao-B7.5.apk')
           with zipfile.ZipFile(apk) as z:
               rows = sorted(((i.file_size, i.compress_size, i.filename) for i in z.infolist()), reverse=True)
           total_raw = sum(r[0] for r in rows)
@@ -221,12 +221,12 @@ jobs:
         if: success()
         shell: bash
         run: |
-          APK="dist/Qunideguanggao-B7.4.apk"
+          APK="dist/Qunideguanggao-B7.5.apk"
           BYTES=$(stat -c%s "$APK")
           MIB=$(awk "BEGIN {printf \"%.3f\", $BYTES/1024/1024}")
           echo "APK size: $BYTES bytes ($MIB MiB)"
           echo "### APK size" >> "$GITHUB_STEP_SUMMARY"
-          echo "Qunideguanggao-B7.4.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Qunideguanggao-B7.5.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
           if [ "$BYTES" -gt 52428800 ]; then
             echo "APK exceeds the 50 MiB project size ceiling" >&2
             exit 1
@@ -236,7 +236,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: dist/Qunideguanggao-B7.4.apk
+          path: dist/Qunideguanggao-B7.5.apk
           if-no-files-found: error
           archive: false
           retention-days: 7
