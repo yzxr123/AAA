@@ -1,0 +1,251 @@
+name: Build 去你的广告 B7.4
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Unpack complete source ZIP when uploaded
+        shell: bash
+        run: |
+          python3 - <<'PYUPLOAD'
+          from pathlib import Path, PurePosixPath
+          import zipfile
+          archive = Path('Qunideguanggao_B7_4_source.zip')
+          if not archive.is_file():
+              print('Using files already present in the repository')
+          else:
+              root = Path.cwd().resolve()
+              with zipfile.ZipFile(archive) as z:
+                  prefix = 'Qunideguanggao_B7_4/'
+                  source = z.read(prefix + 'app/build.gradle').decode('utf-8')
+                  if "versionName '0.7.4-b7.4'" not in source:
+                      raise SystemExit('Uploaded source ZIP is not B7.4')
+                  for item in z.infolist():
+                      if item.is_dir():
+                          continue
+                      if not item.filename.startswith(prefix):
+                          raise SystemExit('Unexpected source ZIP layout')
+                      rel = PurePosixPath(item.filename[len(prefix):])
+                      if rel.is_absolute() or '..' in rel.parts or not rel.parts:
+                          raise SystemExit('Unsafe source ZIP path')
+                      target = (root / str(rel)).resolve()
+                      if not target.is_relative_to(root) or '.git' in rel.parts:
+                          raise SystemExit('Unsafe source ZIP destination')
+                      if (item.external_attr >> 16) & 0o170000 == 0o120000:
+                          raise SystemExit('Symlinks are not accepted in source ZIP')
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(z.read(item))
+              print('Complete B7.4 source ZIP extracted')
+          PYUPLOAD
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle 8.13
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.13'
+          cache-disabled: true
+
+      - name: Build 去你的广告 B7.4
+        id: assemble
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          {
+            echo "===== 去你的广告 B7.4 CI ====="
+            echo "UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "Commit: $GITHUB_SHA"
+            echo "Java: $(java -version 2>&1 | head -1)"
+            echo "Gradle: $(gradle --version | grep '^Gradle ' | head -1)"
+
+            echo "===== Repository cleanup ====="
+            python3 tools/clean_legacy_sources.py
+
+            echo "===== Source verification ====="
+            test -f app/build.gradle
+            test -f tools/fetch_ocr_data.py
+            test -f tools/validate_project.py
+            test -f app/src/main/assets/ltt/AllRules.json
+            test -f app/src/main/assets/ltt/BasicRules.json
+            test -f app/src/main/assets/ltt/ExtendedRules.json
+            test -f app/src/main/java/org/adguardian/app/engine/GkdAssistEngine.java
+            test -f app/src/main/java/org/adguardian/app/ocr/OcrAdDetector.java
+            test -f app/src/main/java/org/adguardian/app/ocr/OcrFallbackController.java
+            grep -F "versionName '0.7.4-b7.4'" app/build.gradle
+            grep -F "Tesseract4Android:tesseract4android:4.9.0" app/build.gradle
+            grep -F "abiFilters 'arm64-v8a'" app/build.gradle
+            grep -F "去你的广告" app/src/main/res/values/strings.xml
+            test -f gkd-core/build.gradle
+            test -f app/src/main/assets/gkd/manifest.json
+            python3 tools/build_gkd_bundle.py --check
+            python3 tools/prepare_gkd_selector.py --check
+            python3 -m unittest discover -s tests -p 'test_*.py' -v
+            echo "B7.4 source layout verified"
+
+            SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+            echo "===== Android SDK ====="
+            "$SDKMANAGER" \
+              "platforms;android-36" \
+              "build-tools;35.0.0"
+
+            echo "===== OCR data ====="
+            python3 tools/fetch_ocr_data.py
+
+            echo "===== Project validation ====="
+            python3 tools/validate_project.py
+
+            echo "===== Real GKD selector and rule runtime tests ====="
+            gradle :gkd-core:verifyGkdRuntime :gkd-core:verifyAndroidHost \
+              --no-daemon --stacktrace --console=plain
+
+            echo "===== Gradle assembleRelease ====="
+            gradle :app:assembleRelease \
+              --no-daemon \
+              --stacktrace \
+              --console=plain
+          } 2>&1 | tee dist/ci-build.log
+
+      - name: Publish failure diagnostics
+        if: failure()
+        shell: bash
+        run: |
+          echo "### 去你的广告 B7.4 build failure" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f dist/ci-build.log ]; then
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 420 dist/ci-build.log >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Failure happened before project build started" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload failure log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/ci-build.log
+          if-no-files-found: ignore
+          archive: false
+          retention-days: 7
+
+      - name: Run Release lint diagnostics
+        if: success()
+        id: lint
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle :app:lintRelease \
+            --no-daemon \
+            --stacktrace \
+            --console=plain \
+            2>&1 | tee dist/lint-release.log
+
+      - name: Report lint diagnostics
+        if: always() && steps.assemble.outcome == 'success'
+        shell: bash
+        run: |
+          echo "### Lint diagnostics" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.lint.outcome }}" = "failure" ]; then
+            echo "lintRelease reported diagnostics but did not block the APK" >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 180 dist/lint-release.log >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "lintRelease passed" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Prepare APK
+        if: success()
+        shell: bash
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.4.apk
+
+      - name: Analyze APK contents
+        if: success()
+        shell: bash
+        run: |
+          python3 - <<'PY' | tee dist/apk-size-report.txt
+          import hashlib
+          import json
+          import zipfile
+          from pathlib import Path
+          apk = Path('dist/Qunideguanggao-B7.4.apk')
+          with zipfile.ZipFile(apk) as z:
+              rows = sorted(((i.file_size, i.compress_size, i.filename) for i in z.infolist()), reverse=True)
+          total_raw = sum(r[0] for r in rows)
+          total_zip = sum(r[1] for r in rows)
+          print(f'APK={apk.stat().st_size} bytes')
+          print(f'ZIP entries raw={total_raw} compressed={total_zip}')
+          rule_file = Path('app/src/main/assets/ltt/AllRules.json')
+          meta_file = Path('app/src/main/assets/ltt/source-meta.json')
+          if rule_file.is_file() and meta_file.is_file():
+              meta = json.loads(meta_file.read_text(encoding='utf-8'))
+              digest = hashlib.sha256(rule_file.read_bytes()).hexdigest()
+              print(f'LiTiaotiao rules packages={meta["package_count"]} popup_rules={meta["popup_rule_count"]} asset={rule_file.stat().st_size} bytes sha256={digest}')
+          gkd = json.loads(Path('app/src/main/assets/gkd/manifest.json').read_text(encoding='utf-8'))
+          print(f'GKD subscription={gkd["id"]} version={gkd["version"]} apps={gkd["app_count"]} groups={gkd["group_count"]} rules={gkd["rule_count"]}')
+          ocr_file = Path('app/src/main/assets/tessdata/chi_sim.traineddata')
+          if ocr_file.is_file():
+              print(f'Tesseract chi_sim model={ocr_file.stat().st_size} bytes')
+          print('Top 30 entries by uncompressed size:')
+          for raw, comp, name in rows[:30]:
+              ratio = 0 if raw == 0 else comp / raw
+              print(f'{raw:>11} raw  {comp:>11} zip  {ratio:>5.2f}  {name}')
+          PY
+          echo "### APK largest entries" >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          cat dist/apk-size-report.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report and enforce APK size
+        if: success()
+        shell: bash
+        run: |
+          APK="dist/Qunideguanggao-B7.4.apk"
+          BYTES=$(stat -c%s "$APK")
+          MIB=$(awk "BEGIN {printf \"%.3f\", $BYTES/1024/1024}")
+          echo "APK size: $BYTES bytes ($MIB MiB)"
+          echo "### APK size" >> "$GITHUB_STEP_SUMMARY"
+          echo "Qunideguanggao-B7.4.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$BYTES" -gt 52428800 ]; then
+            echo "APK exceeds the 50 MiB project size ceiling" >&2
+            exit 1
+          fi
+
+      - name: Upload APK
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/Qunideguanggao-B7.4.apk
+          if-no-files-found: error
+          archive: false
+          retention-days: 7
+
+      - name: Upload APK size report
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/apk-size-report.txt
+          if-no-files-found: error
+          archive: false
+          retention-days: 7
