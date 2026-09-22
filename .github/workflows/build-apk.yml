@@ -1,4 +1,4 @@
-name: Build 去你的广告 B7.9
+name: Build 去你的广告 B7.10
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Prepare and verify B7.9 sources
+      - name: Prepare and verify B7.10 sources
         id: prepare
         shell: bash
         env:
@@ -43,7 +43,7 @@ jobs:
           import zipfile
 
           ROOT = Path(os.environ.get('GITHUB_WORKSPACE', '.')).resolve()
-          VERSION = '0.7.9-b7.9'
+          VERSION = '0.7.10-b7.10'
           REQUIRED = (
               'settings.gradle', 'build.gradle', 'gradle.properties', 'app/build.gradle',
               'app/src/main/AndroidManifest.xml', 'gkd-core/build.gradle', 'dev-signing.jks',
@@ -67,19 +67,26 @@ jobs:
               'app/src/main/java/org/adguardian/app/flow/TeachingHistory.java',
               'tools/validate_class_rules.py',
               'tests/android-host/RegressionB79Tests.java',
+              'app/src/main/java/org/adguardian/app/recording/RecordingDraft.java',
+              'app/src/main/java/org/adguardian/app/recording/RecordingDraftStore.java',
+              'app/src/main/java/org/adguardian/app/recording/RecordingSession.java',
+              'app/src/main/java/org/adguardian/app/runtime/DisplayRotation.java',
+              'tests/android-host/RegressionB710Tests.java',
+              'tests/android-host/RecordingB710Tests.java',
+              'tests/android-host/FinalB710Tests.java',
           )
           SKIP = {'.git', '.gradle', '.idea', '__pycache__', '__MACOSX', 'node_modules', 'build', 'dist'}
           MAX_BYTES = 256 * 1024 * 1024
 
 
           def fail(message):
-              raise SystemExit('ERROR: B7.9 source preparation: ' + message)
+              raise SystemExit('ERROR: B7.10 source preparation: ' + message)
 
 
           def matches(content):
               text = content.decode('utf-8-sig')
               return (re.search(r'\bversionName\s*(?:=\s*)?[\'"]' + re.escape(VERSION) + r'[\'"]', text)
-                      and re.search(r'\bversionCode\s*(?:=\s*)?29\b', text))
+                      and re.search(r'\bversionCode\s*(?:=\s*)?30\b', text))
 
 
           def files_below(folder):
@@ -144,7 +151,7 @@ jobs:
                   if not prefixes:
                       return None
                   if len(prefixes) != 1:
-                      fail('multiple B7.9 projects inside ZIP: ' + str(path))
+                      fail('multiple B7.10 projects inside ZIP: ' + str(path))
                   zip_members(archive, prefixes[0])
                   return prefixes[0]
 
@@ -161,7 +168,7 @@ jobs:
               return result.hexdigest()
 
 
-          print('===== B7.9 source preparation =====', flush=True)
+          print('===== B7.10 source preparation =====', flush=True)
           print('Checkout: ' + str(ROOT), flush=True)
           explicit = os.environ.get('SOURCE_PATH', '').strip()
           selected = inside_checkout(explicit) if explicit else None
@@ -176,16 +183,16 @@ jobs:
               if prefix is not None:
                   archives.append((path, prefix, digest(path)))
               else:
-                  print('Not a complete B7.9 ZIP: ' + str(path.relative_to(ROOT)), flush=True)
+                  print('Not a complete B7.10 ZIP: ' + str(path.relative_to(ROOT)), flush=True)
 
           if selected is not None and selected.is_file() and not archives:
-              fail('selected file is not a B7.9 source ZIP: ' + explicit)
+              fail('selected file is not a B7.10 source ZIP: ' + explicit)
 
           unique_archives = {}
           for row in archives:
               unique_archives.setdefault(row[2], row)
           if len(unique_archives) > 1:
-              fail('multiple different B7.9 ZIP files found\n'
+              fail('multiple different B7.10 ZIP files found\n'
                    + '\n'.join(str(row[0].relative_to(ROOT)) for row in unique_archives.values())
                    + '\nKeep one source ZIP or set source_path in Run workflow')
 
@@ -205,12 +212,12 @@ jobs:
                       else:
                           candidates.append(folder)
               if not candidates:
-                  fail('no complete B7.9 source found\n'
+                  fail('no complete B7.10 source found\n'
                        + ('Incomplete folders: ' + '\n'.join(incomplete) + '\n' if incomplete else '')
-                       + 'Upload Qunideguanggao_B7_9_source.zip with this workflow in the same branch\n'
+                       + 'Upload Qunideguanggao_B7_10_source.zip with this workflow in the same branch\n'
                        + 'Do not re-run an old failed commit; start Run workflow on the updated branch')
               if len(candidates) != 1:
-                  fail('multiple complete B7.9 source folders found; set source_path in Run workflow\n'
+                  fail('multiple complete B7.10 source folders found; set source_path in Run workflow\n'
                        + '\n'.join(str(p.relative_to(ROOT)) for p in candidates))
               source_folder = candidates[0]
 
@@ -218,7 +225,7 @@ jobs:
           runner.mkdir(parents=True, exist_ok=True)
           if runner.is_relative_to(ROOT):
               fail('RUNNER_TEMP must be outside the source checkout')
-          project = Path(tempfile.mkdtemp(prefix='qunideguanggao-b7-9-', dir=runner))
+          project = Path(tempfile.mkdtemp(prefix='qunideguanggao-b7-10-', dir=runner))
           if archive_choice is not None:
               archive_path, prefix, sha256 = archive_choice
               print('Selected ZIP: ' + str(archive_path.relative_to(ROOT)), flush=True)
@@ -248,11 +255,11 @@ jobs:
           if missing:
               fail('prepared source is incomplete: ' + ', '.join(missing))
           if not matches((project / 'app/build.gradle').read_bytes()):
-              fail('prepared source version is not B7.9')
+              fail('prepared source version is not B7.10')
           (project / 'dist').mkdir(exist_ok=True)
           print('Build directory: ' + str(project), flush=True)
           print('Verified: tools/clean_legacy_sources.py', flush=True)
-          print('B7.9 source preparation passed', flush=True)
+          print('B7.10 source preparation passed', flush=True)
           with Path(os.environ['GITHUB_OUTPUT']).open('a', encoding='utf-8') as output:
               output.write('project_dir=' + str(project) + '\n')
           PYUPLOAD
@@ -269,7 +276,7 @@ jobs:
           gradle-version: '8.13'
           cache-disabled: true
 
-      - name: Build 去你的广告 B7.9
+      - name: Build 去你的广告 B7.10
         working-directory: ${{ steps.prepare.outputs.project_dir }}
         id: assemble
         shell: bash
@@ -277,7 +284,7 @@ jobs:
           set -euo pipefail
           mkdir -p dist
           {
-            echo "===== 去你的广告 B7.9 CI ====="
+            echo "===== 去你的广告 B7.10 CI ====="
             echo "UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             echo "Commit: $GITHUB_SHA"
             echo "Java: $(java -version 2>&1 | head -1)"
@@ -296,7 +303,7 @@ jobs:
             test -f app/src/main/java/org/adguardian/app/engine/GkdAssistEngine.java
             test -f app/src/main/java/org/adguardian/app/ocr/OcrAdDetector.java
             test -f app/src/main/java/org/adguardian/app/ocr/OcrFallbackController.java
-            grep -F "versionName '0.7.9-b7.9'" app/build.gradle
+            grep -F "versionName '0.7.10-b7.10'" app/build.gradle
             grep -F "Tesseract4Android:tesseract4android:4.9.0" app/build.gradle
             grep -F "abiFilters 'arm64-v8a'" app/build.gradle
             grep -F "去你的广告" app/src/main/res/values/strings.xml
@@ -305,7 +312,7 @@ jobs:
             python3 tools/build_gkd_bundle.py --check
             python3 tools/prepare_gkd_selector.py --check
             python3 -m unittest discover -s tests -p 'test_*.py' -v
-            echo "B7.9 source layout verified"
+            echo "B7.10 source layout verified"
 
             SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
             echo "===== Android SDK ====="
@@ -336,7 +343,7 @@ jobs:
         env:
           PROJECT_DIR: ${{ steps.prepare.outputs.project_dir }}
         run: |
-          echo "### 去你的广告 B7.9 build failure" >> "$GITHUB_STEP_SUMMARY"
+          echo "### 去你的广告 B7.10 build failure" >> "$GITHUB_STEP_SUMMARY"
           for LOG in source-prepare.log "${PROJECT_DIR:-/nonexistent}/dist/ci-build.log"; do
             if [ -f "$LOG" ]; then
               echo '```text' >> "$GITHUB_STEP_SUMMARY"
@@ -397,7 +404,7 @@ jobs:
         if: success()
         shell: bash
         run: |
-          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.9.apk
+          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.10.apk
 
       - name: Analyze APK contents
         working-directory: ${{ steps.prepare.outputs.project_dir }}
@@ -409,7 +416,7 @@ jobs:
           import json
           import zipfile
           from pathlib import Path
-          apk = Path('dist/Qunideguanggao-B7.9.apk')
+          apk = Path('dist/Qunideguanggao-B7.10.apk')
           with zipfile.ZipFile(apk) as z:
               rows = sorted(((i.file_size, i.compress_size, i.filename) for i in z.infolist()), reverse=True)
           total_raw = sum(r[0] for r in rows)
@@ -442,12 +449,12 @@ jobs:
         if: success()
         shell: bash
         run: |
-          APK="dist/Qunideguanggao-B7.9.apk"
+          APK="dist/Qunideguanggao-B7.10.apk"
           BYTES=$(stat -c%s "$APK")
           MIB=$(awk "BEGIN {printf \"%.3f\", $BYTES/1024/1024}")
           echo "APK size: $BYTES bytes ($MIB MiB)"
           echo "### APK size" >> "$GITHUB_STEP_SUMMARY"
-          echo "Qunideguanggao-B7.9.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Qunideguanggao-B7.10.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
           if [ "$BYTES" -gt 52428800 ]; then
             echo "APK exceeds the 50 MiB project size ceiling" >&2
             exit 1
@@ -457,7 +464,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          path: ${{ steps.prepare.outputs.project_dir }}/dist/Qunideguanggao-B7.9.apk
+          path: ${{ steps.prepare.outputs.project_dir }}/dist/Qunideguanggao-B7.10.apk
           if-no-files-found: error
           archive: false
           retention-days: 7
