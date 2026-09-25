@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"[text=\"关闭广告\"]","snapshotUrls":"https://i.gkd.li/i/14275367"}]}],"id":"com.oneshareclap.malaysian","name":"水果派"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"[text$=\"s\"][text.length=2]","snapshotUrls":"https://i.gkd.li/i/16115075"}]}],"id":"com.dianxinai.mobile","name":"点心云"}

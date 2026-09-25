@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/1cad6c38-5c76-4b5a-b350-bb9630221661","fastQuery":true,"matches":"[vid=\"tv_time\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/19746757"}]}],"id":"com.powersi.zhrs","name":"智慧人社"}

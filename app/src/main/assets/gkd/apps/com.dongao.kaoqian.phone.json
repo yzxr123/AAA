@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"fastQuery":true,"matches":"[vid=\"tv_welcome_guide\"]","snapshotUrls":"https://i.gkd.li/i/14809185"}]}],"id":"com.dongao.kaoqian.phone","name":"会计云课堂"}

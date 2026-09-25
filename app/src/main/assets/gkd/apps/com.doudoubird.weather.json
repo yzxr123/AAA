@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".MainActivity","exampleUrls":"https://e.gkd.li/2a61d3de-6117-4d85-8f4d-565f6ee00a57","fastQuery":true,"matches":"[vid=\"ad_view\"] + [vid=\"delete_icon\"]","snapshotUrls":"https://i.gkd.li/i/17358146"}]}],"id":"com.doudoubird.weather","name":"最准天气"}

@@ -1,0 +1,1 @@
+{"groups":[{"key":2,"name":"局部广告-天气详情页面","rules":[{"activityIds":".lightweb.LightWebNomalStartActivity","key":0,"matches":"[text$=\"广告\"] +5 * > Image","snapshotUrls":"https://i.gkd.li/i/14392332"}]}],"id":"com.vivo.browser","name":"vivo浏览器"}

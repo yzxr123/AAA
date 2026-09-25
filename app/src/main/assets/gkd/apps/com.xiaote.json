@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"[vid=\"ad_close\"][text*=\"关闭\"]","snapshotUrls":"https://i.gkd.li/i/14035706"}]}],"id":"com.xiaote","name":"小特"}

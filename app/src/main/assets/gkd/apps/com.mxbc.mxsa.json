@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":2,"matchTime":10000,"name":"全屏广告-主界面弹窗广告","resetMatch":"app","rules":[{"activityIds":".modules.main.MainActivity","key":1,"matches":"[vid=\"close\"]","snapshotUrls":"https://i.gkd.li/i/12929345"}]}],"id":"com.mxbc.mxsa","name":"蜜雪冰城"}

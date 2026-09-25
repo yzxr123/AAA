@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".pages.apphome.AppHomeActivity","exampleUrls":"https://e.gkd.li/5c1e281a-f5cc-45ff-9799-828f510c78c6","fastQuery":true,"matches":"[vid=\"ivBack\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/19798235"}]}],"id":"com.job.android","name":"前程无忧51Job"}

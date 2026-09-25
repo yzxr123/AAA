@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/6a6a6c4f-4a16-4a10-bb5c-2ce53ebe5e81","fastQuery":true,"matches":"[vid=\"tv_jump_start_ad\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/17901123"}]}],"id":"com.ssports.mobile.video","name":"爱奇艺体育"}

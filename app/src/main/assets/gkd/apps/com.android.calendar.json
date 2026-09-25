@@ -1,0 +1,1 @@
+{"groups":[{"desc":"注意⚠️：该广告需开启[智能服务]的对应规则才能关闭","key":1,"name":"分段广告-卡片广告","rules":[{"activityIds":".homepage.AllInOneActivity","fastQuery":true,"matches":"[vid=\"close\"][desc=\"关闭广告卡片\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/23619245"}]}],"id":"com.android.calendar","name":"小米日历"}

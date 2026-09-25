@@ -1,0 +1,1 @@
+{"groups":[{"key":5,"name":"局部广告","rules":[{"activityIds":"com.xiaomi.mitv.phone.remotecontroller.HoriWidgetMainActivityV2","exampleUrls":"https://e.gkd.li/bf36812a-1bf9-43dc-aca5-f351c2f8d1f6","fastQuery":true,"matches":"[vid=\"image_close_banner\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/22451785"}]}],"id":"com.duokan.phone.remotecontroller","name":"万能遥控"}

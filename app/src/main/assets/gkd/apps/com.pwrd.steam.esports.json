@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/b7adf229-631c-4c27-a07b-eb6e0e1854af","fastQuery":true,"matches":"[vid=\"rl_skip\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/21808124"}]}],"id":"com.pwrd.steam.esports","name":"完美世界电竞"}

@@ -1,0 +1,1 @@
+{"groups":[{"activityIds":[".MainActivity","com.miui.home.launcher.Launcher"],"desc":"点击卡片右上角关闭按钮","key":0,"name":"局部广告-顶部卡片广告","rules":"TextView[text.length>0] < FrameLayout + FrameLayout > ImageView","snapshotUrls":["https://i.gkd.li/i/12606861","https://i.gkd.li/i/12606862"]}],"id":"com.jim.qrcode","name":"随便扫"}

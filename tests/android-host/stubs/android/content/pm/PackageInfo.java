@@ -1,0 +1,1 @@
+package android.content.pm;public class PackageInfo{public String versionName="host-test";public long version=1;public long getLongVersionCode(){return version;}}

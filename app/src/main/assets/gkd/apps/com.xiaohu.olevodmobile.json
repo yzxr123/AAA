@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"@[vid=\"init_time_text\"] + [text=\"跳过\"]","snapshotUrls":"https://i.gkd.li/i/12826256"}]}],"id":"com.xiaohu.olevodmobile","name":"欧乐影院"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"点击关闭","fastQuery":true,"key":1,"matchTime":10000,"name":"全屏广告-抽奖弹窗","resetMatch":"app","rules":[{"activityIds":"com.pmph.main.ad.AdActivity","matches":"[vid=\"iv_close\"]","snapshotUrls":"https://i.gkd.li/i/13897421"}]}],"id":"com.pmph.irenwei","name":"人卫"}

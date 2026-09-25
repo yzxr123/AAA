@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".act.MainActivity","fastQuery":true,"key":0,"matches":"FrameLayout[childCount=5] > FrameLayout[childCount=1] > @ImageView[childCount=0][visibleToUser=true] <<n [vid=\"sdk_container\"]","name":"腾讯广告","snapshotUrls":"https://i.gkd.li/i/13477048"}]}],"id":"com.dewmobile.kuaiya","name":"快牙"}

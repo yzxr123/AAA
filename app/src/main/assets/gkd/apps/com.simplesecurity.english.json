@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/8718ddc4-8775-482e-a259-bc43c7171fd8","fastQuery":true,"matchDelay":3000,"matches":"[text=\"关闭广告\"]","snapshotUrls":"https://i.gkd.li/i/13447714"}]}],"id":"com.simplesecurity.english","name":"水果派"}

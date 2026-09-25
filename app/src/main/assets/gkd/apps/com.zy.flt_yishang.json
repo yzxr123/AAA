@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/882f36c1-d172-436f-a43e-194d75940886","matches":"[desc*=\"跳过\"][desc.length<10][width<500 && height<200][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/24097095"}]}],"id":"com.zy.flt_yishang","name":"飞猫管家"}

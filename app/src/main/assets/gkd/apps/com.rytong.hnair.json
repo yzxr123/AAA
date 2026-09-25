@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"全屏广告-首页弹窗广告","resetMatch":"app","rules":[{"activityIds":"com.hnair.airlines.ui.main.MainActivity","matches":"ImageView[id*=\"com.rytong.hnair:id/iv_cloes\"]","snapshotUrls":"https://i.gkd.li/i/12846381"}]}],"id":"com.rytong.hnair","name":"海南航空"}

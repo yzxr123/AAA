@@ -1,0 +1,1 @@
+{"groups":[{"activityIds":"com.sensorsdata.sf.ui.view.DialogActivity","key":2,"name":"全屏广告-发现页弹窗广告","rules":"LinearLayout[childCount=2] > @ImageView[id=null][clickable=true] + ImageView","snapshotUrls":"https://i.gkd.li/i/12716970"}],"id":"com.boohee.one","name":"薄荷健康"}

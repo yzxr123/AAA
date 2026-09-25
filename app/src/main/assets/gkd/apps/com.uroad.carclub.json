@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".main.activity.MainActivity","fastQuery":true,"key":0,"matches":"View[childCount=4] > @TextView[index=2][clickable=true] <<n [vid=\"ad_container_fl\"]","snapshotUrls":"https://i.gkd.li/i/13800067"}]}],"id":"com.uroad.carclub","name":"ETC车宝"}

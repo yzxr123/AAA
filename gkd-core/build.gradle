@@ -1,0 +1,49 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    api 'org.jetbrains.kotlin:kotlin-stdlib:2.3.10'
+}
+
+tasks.register('verifyGkdRuntime', JavaExec) {
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'org.adguardian.gkd.RuntimeTestsKt'
+    args rootProject.file('tests/selector-corpus.b64').absolutePath,
+            rootProject.file('tests/gkd-corpus.bin').absolutePath
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
+
+tasks.named('check') {
+    dependsOn 'verifyGkdRuntime'
+}
+
+tasks.register('compileAndroidHost', JavaCompile) {
+    dependsOn classes
+    source rootProject.fileTree('app/src/main/java') {
+        include '**/*.java'
+    }
+    source rootProject.fileTree('tests/android-host') { include '**/*.java' }
+    classpath = sourceSets.main.runtimeClasspath
+    destinationDirectory = layout.buildDirectory.dir('android-host-classes')
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+tasks.register('verifyAndroidHost', JavaExec) {
+    dependsOn 'compileAndroidHost'
+    classpath = files(tasks.named('compileAndroidHost').flatMap { it.destinationDirectory }) + sourceSets.main.runtimeClasspath
+    mainClass = 'BackendTests'
+    systemProperty 'test.assets', rootProject.file('app/src/main/assets').absolutePath
+    jvmArgs '-Dfile.encoding=UTF-8'
+}
+
+tasks.named('check') {
+    dependsOn 'verifyAndroidHost'
+}

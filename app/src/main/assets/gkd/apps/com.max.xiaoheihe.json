@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":2,"name":"局部广告-卡片广告","rules":[{"activityIds":".module.bbs.post.ui.activitys.WebNewsPostPageActivity","exampleUrls":"https://m.gkd.li/57941037/b7c25b6e-cc77-4bcc-a477-23b3de74c61f","fastQuery":true,"matches":"[vid=\"iv_notify_close\"]","name":"收藏帖子后底部推荐关注卡片","snapshotUrls":"https://i.gkd.li/i/14914139"}]}],"id":"com.max.xiaoheihe","name":"小黑盒"}

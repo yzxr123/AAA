@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".dialog.BannerDialog","matches":"ImageView[vid=\"exit\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/12744270"}]}],"id":"cn.com.hkgt.gasapp","name":"易捷加油"}

@@ -1,0 +1,192 @@
+{
+  "commonMain/kotlin/li/gkd/selector/DefaultSelectorTypeModel.kt": {
+    "destination": "li/gkd/selector/DefaultSelectorTypeModel.kt",
+    "jvm_sha256": "2eb3a7da28e7492a756a9e865bd17e1830e574ae52a8a4abf0a4dca27cbc6225",
+    "original_sha256": "8b81e7471c6f3cb10484c6a4d4f0840f9cef9fcca46ebdef024a4871338b9b8d"
+  },
+  "commonMain/kotlin/li/gkd/selector/FastQuery.kt": {
+    "destination": "li/gkd/selector/FastQuery.kt",
+    "jvm_sha256": "f0b093b7ae4f46499004c0e893466972fc69b3113cd6ce95198c94c8be60cd27",
+    "original_sha256": "575796a15fcfd87661e61c2f5582be2558603c6a55264790edfc3a81650e5764"
+  },
+  "commonMain/kotlin/li/gkd/selector/LogicalOperator.kt": {
+    "destination": "li/gkd/selector/LogicalOperator.kt",
+    "jvm_sha256": "3bc9cc58b40ba48c72e2cf31f84878a357749adf94e0aa15db4041e67986a348",
+    "original_sha256": "3bc9cc58b40ba48c72e2cf31f84878a357749adf94e0aa15db4041e67986a348"
+  },
+  "commonMain/kotlin/li/gkd/selector/MatchContext.kt": {
+    "destination": "li/gkd/selector/MatchContext.kt",
+    "jvm_sha256": "853897cd5ca47baea25f1ad39b2959f1cf7a258fef3a58216896edb517eac025",
+    "original_sha256": "853897cd5ca47baea25f1ad39b2959f1cf7a258fef3a58216896edb517eac025"
+  },
+  "commonMain/kotlin/li/gkd/selector/MatchOptions.kt": {
+    "destination": "li/gkd/selector/MatchOptions.kt",
+    "jvm_sha256": "16c9462cfa705eaa44d5b759c621f82a0eaadf4e67b90a26186d24271380f9d1",
+    "original_sha256": "5dc66d4fd6b8810c9ec5c05373f4119f5efc78ce458696e14d3c2744302c6a56"
+  },
+  "commonMain/kotlin/li/gkd/selector/NodeAdapter.kt": {
+    "destination": "li/gkd/selector/NodeAdapter.kt",
+    "jvm_sha256": "d777836653f80d209dafe4f9efdb68c7c9f6d95a0274b0c76c1bcabdb538280d",
+    "original_sha256": "d777836653f80d209dafe4f9efdb68c7c9f6d95a0274b0c76c1bcabdb538280d"
+  },
+  "commonMain/kotlin/li/gkd/selector/Selector.kt": {
+    "destination": "li/gkd/selector/Selector.kt",
+    "jvm_sha256": "496de0e53a314175eb09889155732bba506bd4376f68de7dadf40eb3651cce23",
+    "original_sha256": "4c517418ba8b0fce8784528b987c94a3695f534a483bb42928f4df0477e50829"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorException.kt": {
+    "destination": "li/gkd/selector/SelectorException.kt",
+    "jvm_sha256": "6af46fec5432aedfa36f643ca4a670cefe4477fd6af2d625ceae54f3334b5735",
+    "original_sha256": "78f0259e1150534fc5b0d793fd949b6483367cbbae1f96a841c0f4a275a07239"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorMatch.kt": {
+    "destination": "li/gkd/selector/SelectorMatch.kt",
+    "jvm_sha256": "a89433405754cd3ba14f9db6e24eda57e00dadd9ab7ff2be4cc6c237ac2dc30b",
+    "original_sha256": "8ec9a14f27c03e9281a36b06a82e58a86b5784af63734df4b7a21346a84ca681"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorPosition.kt": {
+    "destination": "li/gkd/selector/SelectorPosition.kt",
+    "jvm_sha256": "9e83a3f206d378f3a4c90cb3a51e1589687cb03b5e7fa6a39397a12c192088ed",
+    "original_sha256": "83ca3a1aa61b912e64cdd2240b55ac44c1ffef7ac9a614b94076ac34c84fe71b"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorResults.kt": {
+    "destination": "li/gkd/selector/SelectorResults.kt",
+    "jvm_sha256": "bf7c2e116836df01620c00092a7a72ad18ca9dbfee7367f1d87a75f9dccf8842",
+    "original_sha256": "3bec3e8676d3427878a2a9e2f39361b5bea408fdd014227c4040e3533584b143"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorToken.kt": {
+    "destination": "li/gkd/selector/SelectorToken.kt",
+    "jvm_sha256": "bd52524d517fdc18fe614eb83aa7c0578c6a416df67a3d1d7bd25d91ed851906",
+    "original_sha256": "01bbd2e617967ea1b26b3938eed1f11d480b1e12b0f5113a2d924253e1819e6d"
+  },
+  "commonMain/kotlin/li/gkd/selector/SelectorTypeModel.kt": {
+    "destination": "li/gkd/selector/SelectorTypeModel.kt",
+    "jvm_sha256": "24679c8be961e25c312999355de772c2343e15f2f46100a4cda12ba4e7e25142",
+    "original_sha256": "f5e8eed9d91a8c0bd8c4436e71b56cca5a59fc0f7dc03e37c5a5914d2a21e806"
+  },
+  "commonMain/kotlin/li/gkd/selector/engine/CompiledUnitSelector.kt": {
+    "destination": "li/gkd/selector/engine/CompiledUnitSelector.kt",
+    "jvm_sha256": "993e71d39bd5997f6225074d20b342e3c433808842b76e3855488caa6da44d03",
+    "original_sha256": "993e71d39bd5997f6225074d20b342e3c433808842b76e3855488caa6da44d03"
+  },
+  "commonMain/kotlin/li/gkd/selector/engine/SelectorExpression.kt": {
+    "destination": "li/gkd/selector/engine/SelectorExpression.kt",
+    "jvm_sha256": "3e92220ea8f656dbbb8b718c8add884820e6c0ebbd30d198320c48f9f64d2b0f",
+    "original_sha256": "3e92220ea8f656dbbb8b718c8add884820e6c0ebbd30d198320c48f9f64d2b0f"
+  },
+  "commonMain/kotlin/li/gkd/selector/engine/SelectorProgram.kt": {
+    "destination": "li/gkd/selector/engine/SelectorProgram.kt",
+    "jvm_sha256": "71a2829725c08d162998e99136ab59bc08b8bc4f4bb6e7dcdc47a6319e4753e7",
+    "original_sha256": "71a2829725c08d162998e99136ab59bc08b8bc4f4bb6e7dcdc47a6319e4753e7"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/BuiltinMembers.kt": {
+    "destination": "li/gkd/selector/property/BuiltinMembers.kt",
+    "jvm_sha256": "877b609514bbff8a3c4abebb211ad0a47f44607ef47d644b5e0ca30d52286460",
+    "original_sha256": "1a05cc6db375ddbfa8237140cb0f6ff20d0c355e9b3f00b7cb77c0eeeab56ee9"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/CompareOperator.kt": {
+    "destination": "li/gkd/selector/property/CompareOperator.kt",
+    "jvm_sha256": "6fb34f395d32f18679e731f4e72d27bd76d7d595f5e95e25f45d5487a43416d3",
+    "original_sha256": "31897ae2a1f486cf917869f4660c3d6aa2294c478363c0a876add8826924ba04"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/ExpressionEvaluator.kt": {
+    "destination": "li/gkd/selector/property/ExpressionEvaluator.kt",
+    "jvm_sha256": "c5ac1f9f229480f86de01b00f9b06c2e646d9268634767e7588554f5b2a9494a",
+    "original_sha256": "c5ac1f9f229480f86de01b00f9b06c2e646d9268634767e7588554f5b2a9494a"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/ExpressionTypeChecker.kt": {
+    "destination": "li/gkd/selector/property/ExpressionTypeChecker.kt",
+    "jvm_sha256": "c9e82ab5f99a84b9e394f00f9ed6e386873e5d42714b2b7e17b73618365915b5",
+    "original_sha256": "1f3a4ab4df8bac3b55ffc4e0ae66cf101dae64da4927d20283cad48cfa1eb6c4"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/PropertyExpression.kt": {
+    "destination": "li/gkd/selector/property/PropertyExpression.kt",
+    "jvm_sha256": "62083703e7599b1d53a29e5c94fec2ccff977cff9ec82466c12f9fb9a950dc99",
+    "original_sha256": "62083703e7599b1d53a29e5c94fec2ccff977cff9ec82466c12f9fb9a950dc99"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/PropertySelector.kt": {
+    "destination": "li/gkd/selector/property/PropertySelector.kt",
+    "jvm_sha256": "9d5840c8c9ab4b03f3d5becc18bdf20ee0168cc8b7e8b797e15cc4e3a91a0dbd",
+    "original_sha256": "9d5840c8c9ab4b03f3d5becc18bdf20ee0168cc8b7e8b797e15cc4e3a91a0dbd"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/RegexCompiler.kt": {
+    "destination": "li/gkd/selector/property/RegexCompiler.kt",
+    "jvm_sha256": "a179f7588cb9cfb7089852e367ff2a4047cc80d5b93c95e9ade8fe79eacc0004",
+    "original_sha256": "8f97c75cdacce2cdf4bc9d794916cff06f19d7d92974afdcc884c4ef8501a1f6"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/ValueEvaluator.kt": {
+    "destination": "li/gkd/selector/property/ValueEvaluator.kt",
+    "jvm_sha256": "a3256085f3484a4eacf28c54ce7380216e131320812e606e50e94cd75843892e",
+    "original_sha256": "111f80378e1b0672726ed2b2e7653ad7c1d4ff816dcf14844732bda5d1b56dbb"
+  },
+  "commonMain/kotlin/li/gkd/selector/property/ValueExpression.kt": {
+    "destination": "li/gkd/selector/property/ValueExpression.kt",
+    "jvm_sha256": "34b93e66d524d04ea22aa8a25c4066fc258b26fac19e8e4461fd468a82004989",
+    "original_sha256": "34b93e66d524d04ea22aa8a25c4066fc258b26fac19e8e4461fd468a82004989"
+  },
+  "commonMain/kotlin/li/gkd/selector/relation/RelationExpression.kt": {
+    "destination": "li/gkd/selector/relation/RelationExpression.kt",
+    "jvm_sha256": "2b33ad7594b6fed1efac8683c2bcd586da68476f3c4f9c1d1ea3b25c636c317c",
+    "original_sha256": "2b33ad7594b6fed1efac8683c2bcd586da68476f3c4f9c1d1ea3b25c636c317c"
+  },
+  "commonMain/kotlin/li/gkd/selector/relation/RelationOperator.kt": {
+    "destination": "li/gkd/selector/relation/RelationOperator.kt",
+    "jvm_sha256": "572e6d4a7fae112dfffbba4412524e97908810a5cd8e97f7faf63cf136c0f848",
+    "original_sha256": "572e6d4a7fae112dfffbba4412524e97908810a5cd8e97f7faf63cf136c0f848"
+  },
+  "commonMain/kotlin/li/gkd/selector/relation/RelationSelector.kt": {
+    "destination": "li/gkd/selector/relation/RelationSelector.kt",
+    "jvm_sha256": "f8fc7c4a483b0c82c952d8937e458578beb5248c8c46ad0c7c05a5f3fa39658f",
+    "original_sha256": "f8fc7c4a483b0c82c952d8937e458578beb5248c8c46ad0c7c05a5f3fa39658f"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/ParserContext.kt": {
+    "destination": "li/gkd/selector/syntax/ParserContext.kt",
+    "jvm_sha256": "5b6431102e945bf890904f5fa442a4fa4ed65da2a4379a9664ef911136552607",
+    "original_sha256": "5b6431102e945bf890904f5fa442a4fa4ed65da2a4379a9664ef911136552607"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/ParserCursor.kt": {
+    "destination": "li/gkd/selector/syntax/ParserCursor.kt",
+    "jvm_sha256": "75a329552514e70fa813b359de168ce0ce2604ff95f50660d452a12430348ff5",
+    "original_sha256": "75a329552514e70fa813b359de168ce0ce2604ff95f50660d452a12430348ff5"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/PositionRecorder.kt": {
+    "destination": "li/gkd/selector/syntax/PositionRecorder.kt",
+    "jvm_sha256": "af8e168f4567c90dcae15254525edfa09d29e5ec9f39c5a2fd17a69e6719f645",
+    "original_sha256": "af8e168f4567c90dcae15254525edfa09d29e5ec9f39c5a2fd17a69e6719f645"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/PropertySyntaxParser.kt": {
+    "destination": "li/gkd/selector/syntax/PropertySyntaxParser.kt",
+    "jvm_sha256": "f519348759b68d50c4e1f596c8eb23a7cee1ba31ce7ca91dcd1a92d9eae22820",
+    "original_sha256": "f519348759b68d50c4e1f596c8eb23a7cee1ba31ce7ca91dcd1a92d9eae22820"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/RelationSyntaxParser.kt": {
+    "destination": "li/gkd/selector/syntax/RelationSyntaxParser.kt",
+    "jvm_sha256": "4481d4e615d6ac240fe59f72f1b8fade82ccc058749965e2e70730477261e14e",
+    "original_sha256": "4481d4e615d6ac240fe59f72f1b8fade82ccc058749965e2e70730477261e14e"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/SelectorParser.kt": {
+    "destination": "li/gkd/selector/syntax/SelectorParser.kt",
+    "jvm_sha256": "a0ce9640e7509535ee4bc8f10f73285be5da53f736e55d0e47b111ba885caf69",
+    "original_sha256": "a0ce9640e7509535ee4bc8f10f73285be5da53f736e55d0e47b111ba885caf69"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/SelectorPrinter.kt": {
+    "destination": "li/gkd/selector/syntax/SelectorPrinter.kt",
+    "jvm_sha256": "5ea6bfc9c0edc5663e3ea8608e24a3ae91f42d55dc7bcf857172c6eb6af641be",
+    "original_sha256": "5ea6bfc9c0edc5663e3ea8608e24a3ae91f42d55dc7bcf857172c6eb6af641be"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/SelectorTokenizer.kt": {
+    "destination": "li/gkd/selector/syntax/SelectorTokenizer.kt",
+    "jvm_sha256": "0db05ce6486d6123193fcaf9da67c0c3d696b8584a9f9848c0753c98f1ad2b25",
+    "original_sha256": "0db05ce6486d6123193fcaf9da67c0c3d696b8584a9f9848c0753c98f1ad2b25"
+  },
+  "commonMain/kotlin/li/gkd/selector/syntax/StringScanner.kt": {
+    "destination": "li/gkd/selector/syntax/StringScanner.kt",
+    "jvm_sha256": "cfd540fb1d92dbd87ff624229ec34ce7921848470f8f115bfd46a345c6419d7f",
+    "original_sha256": "cfd540fb1d92dbd87ff624229ec34ce7921848470f8f115bfd46a345c6419d7f"
+  },
+  "jvmMain/kotlin/li/gkd/selector/property/RegexCompiler.jvm.kt": {
+    "destination": "li/gkd/selector/property/RegexCompiler.jvm.kt",
+    "jvm_sha256": "8affa8956ad3508985f4b2dd98b9a5e507b80b7edcff3abfba4aaaf85c02f3c8",
+    "original_sha256": "b711d0e5359249b64ee720d4ca169aaaf3891e770dfddfbe6e53308422cae542"
+  }
+}

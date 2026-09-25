@@ -1,0 +1,11 @@
+{
+  "schema": 2,
+  "source": "user-provided LiTiaotiao-main.zip",
+  "source_sha256": "0623ae015e6868828f391e4f2f4fae3eec1f2d83e407e19dfc197b8d96d201f9",
+  "source_bytes": 61792,
+  "package_count": 328,
+  "popup_rule_count": 795,
+  "inner_parse_failures": 0,
+  "filtered_entries": 0,
+  "filtered_rules": 0
+}

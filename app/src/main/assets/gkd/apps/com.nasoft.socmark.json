@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击x掉","key":1,"name":"局部广告","rules":[{"activityIds":".ui.SearchScoreActivity","fastQuery":true,"matches":"[vid=\"btn_banner_ad_clear\"]","snapshotUrls":"https://i.gkd.li/i/28173008"}]}],"id":"com.nasoft.socmark","name":"手机性能排行"}

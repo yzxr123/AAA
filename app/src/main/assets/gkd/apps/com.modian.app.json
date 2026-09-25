@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-[我的]界面广告条","rules":[{"activityIds":".ui.activity.MainActivity","fastQuery":true,"matches":"[vid=\"fl_banner_layout\"] > [vid=\"iv_close\"]","snapshotUrls":"https://i.gkd.li/i/13610188"}]}],"id":"com.modian.app","name":"摩点"}

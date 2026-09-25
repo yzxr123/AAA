@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"局部广告-评论区上方卡片广告","rules":[{"activityIds":".ui.activity.community.topicdetail.TopicDetailActivity","fastQuery":true,"matches":"[vid=\"v_close\"]","snapshotUrls":"https://i.gkd.li/i/14034770"}]}],"id":"com.lingan.seeyou","name":"美柚"}

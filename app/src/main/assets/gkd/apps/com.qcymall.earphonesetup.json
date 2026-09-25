@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"name":"局部广告-我的-卡片广告","resetMatch":"app","rules":[{"activityIds":".v2ui.activity.V2MainActivity","matches":"[vid=\"close_img_banner\"]","snapshotUrls":"https://i.gkd.li/i/13874219"}]}],"id":"com.qcymall.earphonesetup","name":"QCY"}

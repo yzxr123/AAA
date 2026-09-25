@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":3,"matchTime":10000,"name":"全屏广告-开通会员弹窗","resetMatch":"app","rules":[{"activityIds":"com.one.downloadtools.ui.activity.HomeActivity","matches":["[text^=\"开通会员\"]","[text=\"暂不\"]"],"snapshotUrls":"https://i.gkd.li/i/13392112"}]}],"id":"com.wan.tools","name":"下载工具箱"}

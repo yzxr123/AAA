@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">去你的广告</string>
+    <string name="service_name">去你的广告</string>
+    <string name="service_description">自动跳过广告和广告弹窗 所有识别均在本机完成</string>
+</resources>

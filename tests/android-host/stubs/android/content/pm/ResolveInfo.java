@@ -1,0 +1,1 @@
+package android.content.pm;public class ResolveInfo{public ServiceInfo serviceInfo;public ActivityInfo activityInfo;}

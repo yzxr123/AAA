@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":5,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".module.home.activity.HomeActivity","matches":"[vid=\"cardView\"] + [vid=\"iv_close\"]","snapshotUrls":"https://i.gkd.li/i/13497777"}]}],"id":"com.gvsoft.gofun","name":"GoFun出行"}

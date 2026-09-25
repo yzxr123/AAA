@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"关闭弹窗","key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".app.home.HomeActivity","matches":"@TextView[clickable=true][childCount=0] <2 RelativeLayout[childCount=2] < FrameLayout < [parent=null]","snapshotUrls":"https://i.gkd.li/i/13163686"}]}],"id":"com.thestore.main","name":"1号会员店"}

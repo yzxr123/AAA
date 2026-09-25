@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":5,"name":"局部广告-信息流广告","rules":[{"activityIds":".activity.ReadRoomActivity","fastQuery":true,"matches":"@View[clickable=true] < FrameLayout[desc^=\"dislike\"] -2 FrameLayout >2 [text=\"广告\"]","snapshotUrls":"https://i.gkd.li/i/13485051"}]}],"id":"com.doc360.client","name":"个人图书馆"}

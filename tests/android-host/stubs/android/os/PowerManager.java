@@ -1,0 +1,1 @@
+package android.os;public class PowerManager{public boolean ignored;public boolean isIgnoringBatteryOptimizations(String p){return ignored;}}

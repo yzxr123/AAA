@@ -1,0 +1,1 @@
+package com.googlecode.tesseract.android;import android.graphics.Rect;public class ResultIterator{public void begin(){}public String getUTF8Text(int l){return "";}public Rect getBoundingRect(int l){return null;}public float confidence(int l){return 0;}public boolean next(int l){return false;}public void delete(){}}

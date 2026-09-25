@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"ImageView[vid=\"adview_jump\"]","snapshotUrls":"https://i.gkd.li/i/13538616"}]}],"id":"com.eco.global.app","name":"ECOVACS HOME"}

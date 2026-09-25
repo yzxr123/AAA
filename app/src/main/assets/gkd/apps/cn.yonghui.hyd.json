@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"全屏广告-红包弹窗","rules":[{"activityIds":".coupon.couponfactory.CouponFactoryActivity","key":1,"matches":["[vid=\"advance\" || vid=\"couponsWillGoneHeaderIv\"]","[vid=\"close\"]"],"name":"好券即将过期弹窗","snapshotUrls":["https://i.gkd.li/i/13414401","https://i.gkd.li/i/13414444"]}]}],"id":"cn.yonghui.hyd","name":"永辉生活"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":2,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".activity.MainActivity","fastQuery":true,"key":0,"matches":"[vid=\"rl_screen_ad_close\"]","snapshotUrls":"https://i.gkd.li/i/13761825"}]}],"id":"com.redfinger.app","name":"红手指云手机"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".app.HomeActivity","matches":"[vid=\"dialog_home_close\"]","snapshotUrls":"https://i.gkd.li/i/12695751"}]}],"id":"com.smzdm.client.android","name":"什么值得买"}

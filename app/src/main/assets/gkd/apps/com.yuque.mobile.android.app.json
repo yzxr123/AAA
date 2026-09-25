@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点x取消提示","key":0,"name":"局部广告-[用语雀公众号]横幅提示","rules":[{"activityIds":".rn.activity.ReactNativeMainActivity","matches":"TextView[text=\"了解更多\"] + ViewGroup[clickable=true]","snapshotUrls":"https://i.gkd.li/i/12911014"}]}],"id":"com.yuque.mobile.android.app","name":"语雀"}

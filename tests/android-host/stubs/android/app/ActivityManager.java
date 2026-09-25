@@ -1,0 +1,1 @@
+package android.app;import java.util.*;public class ActivityManager{public List<ApplicationExitInfo> getHistoricalProcessExitReasons(String p,int pid,int n){return Collections.emptyList();}}

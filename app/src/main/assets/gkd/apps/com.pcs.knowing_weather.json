@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/68883ff3-cc5a-46a1-9258-bfeff208dbee","fastQuery":true,"matches":"[vid=\"btn_close\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/19832565"}]}],"id":"com.pcs.knowing_weather","name":"知天气"}

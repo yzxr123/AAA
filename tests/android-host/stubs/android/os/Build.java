@@ -1,0 +1,1 @@
+package android.os;public class Build{public static final String MANUFACTURER="Host",MODEL="No real Android device";public static class VERSION{public static int SDK_INT=36;public static final String RELEASE="host";}}

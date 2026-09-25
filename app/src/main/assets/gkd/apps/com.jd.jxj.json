@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"点击关闭","key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".modules.main.SlidingTabActivity","exampleUrls":"https://m.gkd.li/57941037/ac5a04ef-3199-4ae5-8863-ea365b5efbab","fastQuery":true,"matches":"[vid=\"popup_close_imgid\"]","snapshotUrls":"https://i.gkd.li/i/15369226"}]}],"id":"com.jd.jxj","name":"京粉"}

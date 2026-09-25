@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-首页顶部横幅广告","rules":[{"activityIds":".MainActivity","fastQuery":true,"matches":"@[desc=\"banner-desktop-announcement-close\"][visibleToUser=true] - ViewGroup > [text*=\"免费试用企业版\"]","snapshotUrls":"https://i.gkd.li/i/13627960"}]}],"id":"chuxin.shimo.shimowendang","name":"石墨文档"}

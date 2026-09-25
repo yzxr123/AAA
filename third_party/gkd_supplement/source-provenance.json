@@ -1,0 +1,12 @@
+{
+  "repository": "nullptr-leo/gkd-rules",
+  "repository_url": "https://github.com/nullptr-leo/gkd-rules",
+  "commit": "8b93cfe2bda7bfcba6d9847f992a177c35aff7c4",
+  "source_file": "jkd-rules.json",
+  "source_sha256": "fafddd27c16a55eb8c5205536782eabd143bc39707e6e92ec69c97f3fe13b26c",
+  "license": "Apache-2.0",
+  "sha256": "93e74ca104a84cbf822ffacace645f2a00c9bcd9b0a1eb22dc0926e0944fbeb0",
+  "selection": "Only reviewed app-scoped advertisement groups; no global rules; bank/payment targets excluded; group keys remapped to 900001-900012 to avoid collisions",
+  "app_count": 11,
+  "group_count": 12
+}

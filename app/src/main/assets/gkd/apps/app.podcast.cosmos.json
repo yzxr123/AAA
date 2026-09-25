@@ -1,0 +1,1 @@
+{"groups":[{"desc":"x掉","key":1,"name":"全屏广告-内容推荐","rules":[{"activityIds":"io.iftech.android.podcast.app.home.index.view.HomeActivity","fastQuery":true,"matches":"[vid=\"clSubscribeBsd\"] > [vid=\"ivCancel\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/25470023"}]}],"id":"app.podcast.cosmos","name":"小宇宙"}

@@ -1,0 +1,1 @@
+package android.graphics;public class RecordingCanvas{public void drawBitmap(Bitmap b,Rect a,Rect z,Paint p){}}

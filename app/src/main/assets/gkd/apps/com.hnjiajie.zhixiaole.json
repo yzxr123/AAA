@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/0b7ec3a5-d601-489a-a50c-32c876f38edf","fastQuery":true,"matches":"[vid=\"tev_countdown\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/20745490"}]}],"id":"com.hnjiajie.zhixiaole","name":"智校乐"}

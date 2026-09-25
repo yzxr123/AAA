@@ -1,0 +1,1 @@
+package android.view.accessibility;import java.util.*;import android.accessibilityservice.AccessibilityServiceInfo;public class AccessibilityManager{public final List<AccessibilityServiceInfo> enabled=new ArrayList<>();public List<AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int mask){return enabled;}}

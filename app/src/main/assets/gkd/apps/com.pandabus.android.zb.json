@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":3,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"matches":"[vid=\"iv_native_dislike\"]","snapshotUrls":"https://i.gkd.li/i/13400177"}]}],"id":"com.pandabus.android.zb","name":"淄博出行"}

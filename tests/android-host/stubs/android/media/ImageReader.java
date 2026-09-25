@@ -1,0 +1,1 @@
+package android.media;import android.view.Surface;public class ImageReader{public static ImageReader newInstance(int w,int h,int f,int n,long flags){return new ImageReader();}public Surface getSurface(){return new Surface();}public Image acquireLatestImage(){return null;}public void close(){}}

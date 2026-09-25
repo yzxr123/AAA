@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":4,"name":"局部广告-卡片广告","rules":[{"activityIds":".clear.ClearMainActivity","exampleUrls":"https://m.gkd.li/57941037/4d8b27a4-f129-479e-871b-bc6f664072ae","fastQuery":true,"matches":"[vid=\"ad_close\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/14317524"}]}],"id":"com.coloros.phonemanager","name":"OPPO手机管家"}

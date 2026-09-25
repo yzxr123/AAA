@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".home.HomeActivity","fastQuery":true,"key":0,"matches":"[vid=\"titleArea\"] + [vid=\"closeImg\"]","snapshotUrls":"https://i.gkd.li/i/13476350"}]}],"id":"com.qingwatq.weather","name":"呱呱天气"}

@@ -1,0 +1,1 @@
+{"groups":[{"key":3,"name":"全屏广告-弹窗广告","rules":[{"activityIds":"com.hihonor.adsdk.reward.RewardActivity","exampleUrls":"https://e.gkd.li/457f1d00-a7ea-43cb-9263-be9a012bf310","fastQuery":true,"matches":"[vid=\"ad_close_dialog\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/31248363"}]}],"id":"com.hihonor.wallet","name":"荣耀钱包"}

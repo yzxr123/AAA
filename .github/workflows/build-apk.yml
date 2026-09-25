@@ -1,374 +1,78 @@
 name: Build 去你的广告 B7.17
 
 on:
-  workflow_dispatch:
-    inputs:
-      source_path:
-        description: '源码 ZIP 或目录路径 留空自动识别'
-        required: false
-        default: ''
-        type: string
   push:
-    branches:
-      - main
-      - master
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Prepare and verify B7.17 sources
-        id: prepare
-        shell: bash
-        env:
-          SOURCE_PATH: ${{ inputs.source_path }}
-        run: |
-          set -euo pipefail
-          python3 -u - <<'PYUPLOAD' 2>&1 | tee source-prepare.log
-          from pathlib import Path, PurePosixPath
-          import hashlib
-          import os
-          import re
-          import shutil
-          import stat
-          import tempfile
-          import zipfile
-
-          ROOT = Path(os.environ.get('GITHUB_WORKSPACE', '.')).resolve()
-          VERSION = '0.7.17-b7.17'
-          REQUIRED = (
-              'settings.gradle', 'build.gradle', 'gradle.properties', 'app/build.gradle',
-              'app/src/main/AndroidManifest.xml', 'gkd-core/build.gradle', 'dev-signing.jks',
-              'tools/clean_legacy_sources.py', 'tools/validate_project.py',
-              'tools/build_gkd_bundle.py', 'tools/prepare_gkd_selector.py',
-              'tools/fetch_ocr_data.py', 'tools/report_lint.py',
-              'third_party/gkd_subscription/source.json',
-              'third_party/gkd_supplement/source.json',
-              'third_party/gkd_supplement/LICENSE',
-              'app/src/main/assets/gkd/manifest.json',
-              'app/src/main/assets/ltt/AllRules.json',
-              'app/src/main/assets/ltt/BasicRules.json',
-              'app/src/main/assets/ltt/ExtendedRules.json',
-              'app/src/main/java/org/adguardian/app/engine/RuleEngine.java',
-              'app/src/main/java/org/adguardian/app/engine/JumpGuard.java',
-              'app/src/main/java/org/adguardian/app/gkd/GkdSubscriptionEngine.java',
-              'app/src/main/java/org/adguardian/app/ocr/OcrFallbackController.java',
-              'app/src/main/java/org/adguardian/app/sdk/SdkAdEngine.java',
-              'tests/android-host/ProductB716Tests.java',
-              'tests/android-host/RecordLogB716Tests.java',
-              'tests/android-host/PopupSafetyB716Tests.java',
-              'tests/android-host/SubscriptionCancellationB716Tests.java',
-              'tests/android-host/SubscriptionOwnershipB716Tests.java',
-              'tests/test_subscription_bundle.py', 'tests/test_b714_lint.py',
-          )
-          SKIP = {'.git', '.gradle', '.idea', '__pycache__', '__MACOSX', 'node_modules', 'build', 'dist'}
-          MAX_BYTES = 256 * 1024 * 1024
-
-
-          def fail(message):
-              raise SystemExit('ERROR: B7.17 source preparation: ' + message)
-
-
-          def matches(content):
-              text = content.decode('utf-8-sig')
-              return (re.search(r'\bversionName\s*(?:=\s*)?[\'"]' + re.escape(VERSION) + r'[\'"]', text)
-                      and re.search(r'\bversionCode\s*(?:=\s*)?37\b', text))
-
-
-          def files_below(folder):
-              for base, dirs, names in os.walk(folder, followlinks=False):
-                  current = Path(base)
-                  dirs[:] = sorted(d for d in dirs if d not in SKIP and not (current / d).is_symlink())
-                  for name in sorted(names):
-                      path = current / name
-                      if not path.is_symlink():
-                          yield path
-
-
-          def inside_checkout(value):
-              selected = (ROOT / value).resolve()
-              if not selected.is_relative_to(ROOT):
-                  fail('source_path must stay inside this checkout')
-              if not selected.exists():
-                  fail('source_path does not exist: ' + value)
-              return selected
-
-
-          def zip_members(archive, prefix):
-              members = {}
-              total = 0
-              for item in archive.infolist():
-                  if item.is_dir() or not item.filename.startswith(prefix):
-                      continue
-                  raw = item.filename[len(prefix):]
-                  relative = PurePosixPath(raw)
-                  if (not raw or '\\' in raw or ':' in raw or relative.is_absolute()
-                          or '..' in relative.parts or '.git' in relative.parts
-                          or str(relative) != raw or '\n' in raw or '\r' in raw):
-                      fail('unsafe ZIP path: ' + repr(raw))
-                  kind = stat.S_IFMT(item.external_attr >> 16)
-                  if kind not in (0, stat.S_IFREG):
-                      fail('ZIP links and special files are not accepted: ' + repr(raw))
-                  if item.flag_bits & 1:
-                      fail('encrypted ZIP entries are not accepted')
-                  if raw in members:
-                      fail('duplicate ZIP entry: ' + repr(raw))
-                  total += item.file_size
-                  if total > MAX_BYTES or len(members) >= 20000:
-                      fail('source ZIP exceeds the extraction limit')
-                  members[raw] = item
-              missing = [name for name in REQUIRED if name not in members or members[name].file_size == 0]
-              if missing:
-                  fail('incomplete source ZIP ' + str(archive.filename) + '\nMissing: ' + ', '.join(missing))
-              return members
-
-
-          def inspect_zip(path):
-              if not zipfile.is_zipfile(path):
-                  return None
-              with zipfile.ZipFile(path) as archive:
-                  prefixes = []
-                  for item in archive.infolist():
-                      if item.filename == 'app/build.gradle' or item.filename.endswith('/app/build.gradle'):
-                          if item.file_size > 1024 * 1024:
-                              fail('unexpectedly large app/build.gradle in ' + str(path))
-                          if matches(archive.read(item)):
-                              prefixes.append(item.filename[:-len('app/build.gradle')])
-                  if not prefixes:
-                      return None
-                  if len(prefixes) != 1:
-                      fail('multiple B7.17 projects inside ZIP: ' + str(path))
-                  zip_members(archive, prefixes[0])
-                  return prefixes[0]
-
-
-          def missing_in(folder):
-              return [name for name in REQUIRED if not (folder / name).is_file() or (folder / name).stat().st_size == 0]
-
-
-          def digest(path):
-              result = hashlib.sha256()
-              with path.open('rb') as stream:
-                  for block in iter(lambda: stream.read(1024 * 1024), b''):
-                      result.update(block)
-              return result.hexdigest()
-
-
-          print('===== B7.17 source preparation =====', flush=True)
-          print('Checkout: ' + str(ROOT), flush=True)
-          explicit = os.environ.get('SOURCE_PATH', '').strip()
-          selected = inside_checkout(explicit) if explicit else None
-          all_files = list(files_below(ROOT)) if selected is None else []
-          archive_paths = ([selected] if selected is not None and selected.is_file()
-                           else ([] if selected is not None else [p for p in all_files if p.suffix.lower() == '.zip']))
-          print('ZIP files found: ' + str(len(archive_paths)), flush=True)
-          archives = []
-          for path in archive_paths:
-              print('Inspecting ZIP: ' + str(path.relative_to(ROOT)), flush=True)
-              prefix = inspect_zip(path)
-              if prefix is not None:
-                  archives.append((path, prefix, digest(path)))
-              else:
-                  print('Not a complete B7.17 ZIP: ' + str(path.relative_to(ROOT)), flush=True)
-
-          if selected is not None and selected.is_file() and not archives:
-              fail('selected file is not a B7.17 source ZIP: ' + explicit)
-
-          unique_archives = {}
-          for row in archives:
-              unique_archives.setdefault(row[2], row)
-          if len(unique_archives) > 1:
-              fail('multiple different B7.17 ZIP files found\n'
-                   + '\n'.join(str(row[0].relative_to(ROOT)) for row in unique_archives.values())
-                   + '\nKeep one source ZIP or set source_path in Run workflow')
-
-          archive_choice = next(iter(unique_archives.values()), None)
-          source_folder = None
-          if archive_choice is None:
-              candidates = []
-              incomplete = []
-              locations = [selected] if selected is not None else [p.parent.parent for p in all_files
-                  if p.name == 'build.gradle' and p.parent.name == 'app']
-              for folder in locations:
-                  build = folder / 'app/build.gradle'
-                  if build.is_file() and matches(build.read_bytes()):
-                      missing = missing_in(folder)
-                      if missing:
-                          incomplete.append(str(folder.relative_to(ROOT)) + ': ' + ', '.join(missing))
-                      else:
-                          candidates.append(folder)
-              if not candidates:
-                  fail('no complete B7.17 source found\n'
-                       + ('Incomplete folders: ' + '\n'.join(incomplete) + '\n' if incomplete else '')
-                       + 'Upload Qunideguanggao_B7_17_source.zip with this workflow in the same branch\n'
-                       + 'Do not re-run an old failed commit; start Run workflow on the updated branch')
-              if len(candidates) != 1:
-                  fail('multiple complete B7.17 source folders found; set source_path in Run workflow\n'
-                       + '\n'.join(str(p.relative_to(ROOT)) for p in candidates))
-              source_folder = candidates[0]
-
-          runner = Path(os.environ.get('RUNNER_TEMP', tempfile.gettempdir())).resolve()
-          runner.mkdir(parents=True, exist_ok=True)
-          if runner.is_relative_to(ROOT):
-              fail('RUNNER_TEMP must be outside the source checkout')
-          project = Path(tempfile.mkdtemp(prefix='qunideguanggao-b7-17-', dir=runner))
-          if archive_choice is not None:
-              archive_path, prefix, sha256 = archive_choice
-              print('Selected ZIP: ' + str(archive_path.relative_to(ROOT)), flush=True)
-              print('Source ZIP SHA256: ' + sha256, flush=True)
-              with zipfile.ZipFile(archive_path) as archive:
-                  for relative, item in zip_members(archive, prefix).items():
-                      target = project / relative
-                      target.parent.mkdir(parents=True, exist_ok=True)
-                      with archive.open(item) as source, target.open('wb') as destination:
-                          shutil.copyfileobj(source, destination)
-                      target.chmod(0o755 if (item.external_attr >> 16) & 0o111 else 0o644)
-          else:
-              print('Selected source folder: ' + str(source_folder.relative_to(ROOT)), flush=True)
-              for path in files_below(source_folder):
-                  if path.suffix.lower() == '.zip' or path.name == 'source-prepare.log':
-                      continue
-                  target = project / path.relative_to(source_folder)
-                  target.parent.mkdir(parents=True, exist_ok=True)
-                  shutil.copy2(path, target)
-
-          active_workflow = ROOT / '.github/workflows/build-apk.yml'
-          if active_workflow.is_file():
-              target = project / '.github/workflows/build-apk.yml'
-              target.parent.mkdir(parents=True, exist_ok=True)
-              shutil.copy2(active_workflow, target)
-          missing = missing_in(project)
-          if missing:
-              fail('prepared source is incomplete: ' + ', '.join(missing))
-          if not matches((project / 'app/build.gradle').read_bytes()):
-              fail('prepared source version is not B7.17')
-          (project / 'dist').mkdir(exist_ok=True)
-          print('Build directory: ' + str(project), flush=True)
-          print('Verified: tools/clean_legacy_sources.py', flush=True)
-          print('B7.17 source preparation passed', flush=True)
-          with Path(os.environ['GITHUB_OUTPUT']).open('a', encoding='utf-8') as output:
-              output.write('project_dir=' + str(project) + '\n')
-          PYUPLOAD
+      - name: Checkout source
+        uses: actions/checkout@v7
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
+          verify-signature: true
 
       - name: Setup Gradle 9.4.1
         uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '9.4.1'
-          cache-disabled: true
+          cache-provider: basic
+
+      - name: Install Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          # compileSdk 37; older project notes called this platforms;android-37.0.
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37" \
+            "build-tools;36.0.0"
+
+      - name: Validate source and rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/validate_project.py
+          python3 tools/build_gkd_bundle.py --check
+          python3 tools/prepare_gkd_selector.py --check
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Fetch verified OCR model
+        run: python3 tools/fetch_ocr_data.py
 
       - name: Build 去你的广告 B7.17
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
         id: assemble
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p dist
-          {
-            echo "===== 去你的广告 B7.17 CI ====="
-            echo "UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            echo "Commit: $GITHUB_SHA"
-            echo "Java: $(java -version 2>&1 | head -1)"
-            echo "Gradle: $(gradle --version | grep '^Gradle ' | head -1)"
-
-            echo "===== Repository cleanup ====="
-            python3 tools/clean_legacy_sources.py
-
-            echo "===== Source verification ====="
-            test -f app/build.gradle
-            test -f tools/fetch_ocr_data.py
-            test -f tools/validate_project.py
-            test -f app/src/main/assets/ltt/AllRules.json
-            test -f app/src/main/assets/ltt/BasicRules.json
-            test -f app/src/main/assets/ltt/ExtendedRules.json
-            test -f app/src/main/java/org/adguardian/app/engine/GkdAssistEngine.java
-            test -f app/src/main/java/org/adguardian/app/ocr/OcrAdDetector.java
-            test -f app/src/main/java/org/adguardian/app/ocr/OcrFallbackController.java
-            grep -F "versionName = '0.7.17-b7.17'" app/build.gradle
-            grep -F "Tesseract4Android:tesseract4android:4.9.0" app/build.gradle
-            grep -F "abiFilters.addAll(['arm64-v8a', 'x86_64'])" app/build.gradle
-            grep -F "去你的广告" app/src/main/res/values/strings.xml
-            test -f gkd-core/build.gradle
-            test -f app/src/main/assets/gkd/manifest.json
-            python3 tools/build_gkd_bundle.py --check
-            python3 tools/prepare_gkd_selector.py --check
-            python3 -m unittest discover -s tests -p 'test_*.py' -v
-            echo "B7.17 source layout verified"
-
-            SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
-            echo "===== Android SDK ====="
-            "$SDKMANAGER" \
-              "platforms;android-37.0" \
-              "build-tools;36.0.0"
-
-            echo "===== OCR data ====="
-            python3 tools/fetch_ocr_data.py
-
-            echo "===== Project validation ====="
-            python3 tools/validate_project.py
-
-            echo "===== Real GKD selector and rule runtime tests ====="
-            gradle :gkd-core:verifyGkdRuntime :gkd-core:verifyAndroidHost \
-              --no-daemon --stacktrace --console=plain
-
-            echo "===== Gradle assembleRelease ====="
-            gradle :app:assembleRelease \
-              --no-daemon \
-              --stacktrace \
-              --console=plain
-          } 2>&1 | tee dist/ci-build.log
-
-      - name: Publish failure diagnostics
-        if: failure()
-        shell: bash
-        env:
-          PROJECT_DIR: ${{ steps.prepare.outputs.project_dir }}
-        run: |
-          echo "### 去你的广告 B7.17 build failure" >> "$GITHUB_STEP_SUMMARY"
-          for LOG in source-prepare.log "${PROJECT_DIR:-/nonexistent}/dist/ci-build.log"; do
-            if [ -f "$LOG" ]; then
-              echo '```text' >> "$GITHUB_STEP_SUMMARY"
-              tail -n 420 "$LOG" >> "$GITHUB_STEP_SUMMARY"
-              echo '```' >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-
-      - name: Upload source preparation log
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          path: source-prepare.log
-          if-no-files-found: ignore
-          archive: false
-          retention-days: 7
-
-      - name: Upload failure log
-        if: failure() && steps.prepare.outcome == 'success'
-        uses: actions/upload-artifact@v7
-        with:
-          path: ${{ steps.prepare.outputs.project_dir }}/dist/ci-build.log
-          if-no-files-found: ignore
-          archive: false
-          retention-days: 7
+          gradle \
+            :gkd-core:verifyGkdRuntime \
+            :gkd-core:verifyAndroidHost \
+            :app:assembleRelease \
+            --no-daemon \
+            --stacktrace \
+            --console=plain 2>&1 | tee dist/ci-build.log
 
       - name: Run Release lint diagnostics
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
-        if: success()
+        if: steps.assemble.outcome == 'success'
         id: lint
-        # Continue only long enough to export diagnostics; the gate below still fails the job.
         continue-on-error: true
         shell: bash
         run: |
@@ -378,13 +82,10 @@ jobs:
             --no-daemon \
             --stacktrace \
             --warning-mode all \
-            --console=plain \
-            2>&1 | tee dist/lint-release.log
+            --console=plain 2>&1 | tee dist/lint-release.log
 
       - name: Collect complete lint diagnostics
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: always() && steps.assemble.outcome == 'success'
-        id: lint_report
         shell: bash
         env:
           LINT_OUTCOME: ${{ steps.lint.outcome }}
@@ -398,97 +99,43 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: lint-reports-B7.17
-          path: ${{ steps.prepare.outputs.project_dir }}/dist/lint-reports/
+          path: dist/lint-reports/
           if-no-files-found: error
-          archive: true
           retention-days: 14
 
       - name: Enforce Release lint result
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: always() && steps.assemble.outcome == 'success'
         shell: bash
         env:
           LINT_OUTCOME: ${{ steps.lint.outcome }}
-        run: |
-          set -euo pipefail
-          python3 tools/report_lint.py --outcome "$LINT_OUTCOME" --check
+        run: python3 tools/report_lint.py --outcome "$LINT_OUTCOME" --check
 
       - name: Prepare APK
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
         if: success()
         shell: bash
         run: |
+          set -euo pipefail
           cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.17.apk
-
-      - name: Analyze APK contents
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
-        if: success()
-        shell: bash
-        run: |
-          python3 - <<'PY' | tee dist/apk-size-report.txt
-          import hashlib
-          import json
-          import zipfile
-          from pathlib import Path
-          apk = Path('dist/Qunideguanggao-B7.17.apk')
-          with zipfile.ZipFile(apk) as z:
-              rows = sorted(((i.file_size, i.compress_size, i.filename) for i in z.infolist()), reverse=True)
-          total_raw = sum(r[0] for r in rows)
-          total_zip = sum(r[1] for r in rows)
-          print(f'APK={apk.stat().st_size} bytes')
-          print(f'ZIP entries raw={total_raw} compressed={total_zip}')
-          rule_file = Path('app/src/main/assets/ltt/AllRules.json')
-          meta_file = Path('app/src/main/assets/ltt/source-meta.json')
-          if rule_file.is_file() and meta_file.is_file():
-              meta = json.loads(meta_file.read_text(encoding='utf-8'))
-              digest = hashlib.sha256(rule_file.read_bytes()).hexdigest()
-              print(f'LiTiaotiao rules packages={meta["package_count"]} popup_rules={meta["popup_rule_count"]} asset={rule_file.stat().st_size} bytes sha256={digest}')
-          gkd = json.loads(Path('app/src/main/assets/gkd/manifest.json').read_text(encoding='utf-8'))
-          print(f'GKD subscription={gkd["id"]} version={gkd["version"]} apps={gkd["app_count"]} groups={gkd["group_count"]} rules={gkd["rule_count"]}')
-          ocr_file = Path('app/src/main/assets/tessdata/chi_sim.traineddata')
-          if ocr_file.is_file():
-              print(f'Tesseract chi_sim model={ocr_file.stat().st_size} bytes')
-          print('Top 30 entries by uncompressed size:')
-          for raw, comp, name in rows[:30]:
-              ratio = 0 if raw == 0 else comp / raw
-              print(f'{raw:>11} raw  {comp:>11} zip  {ratio:>5.2f}  {name}')
-          PY
-          echo "### APK largest entries" >> "$GITHUB_STEP_SUMMARY"
-          echo '```text' >> "$GITHUB_STEP_SUMMARY"
-          cat dist/apk-size-report.txt >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Report and enforce APK size
-        working-directory: ${{ steps.prepare.outputs.project_dir }}
-        if: success()
-        shell: bash
-        run: |
-          APK="dist/Qunideguanggao-B7.17.apk"
-          BYTES=$(stat -c%s "$APK")
-          MIB=$(awk "BEGIN {printf \"%.3f\", $BYTES/1024/1024}")
-          echo "APK size: $BYTES bytes ($MIB MiB)"
-          echo "### APK size" >> "$GITHUB_STEP_SUMMARY"
-          echo "Qunideguanggao-B7.17.apk: **$MIB MiB** ($BYTES bytes)" >> "$GITHUB_STEP_SUMMARY"
-          if [ "$BYTES" -gt 52428800 ]; then
-            echo "APK exceeds the 50 MiB project size ceiling" >&2
-            exit 1
-          fi
+          BYTES=$(stat -c%s dist/Qunideguanggao-B7.17.apk)
+          [[ "$BYTES" -le 52428800 ]] || { echo 'APK exceeds 50 MiB' >&2; exit 1; }
+          (cd dist && sha256sum Qunideguanggao-B7.17.apk > SHA256SUMS.txt)
 
       - name: Upload APK
         if: success()
         uses: actions/upload-artifact@v7
         with:
           name: Qunideguanggao-B7.17-APK
-          path: ${{ steps.prepare.outputs.project_dir }}/dist/Qunideguanggao-B7.17.apk
+          path: |
+            dist/Qunideguanggao-B7.17.apk
+            dist/SHA256SUMS.txt
           if-no-files-found: error
-          archive: false
-          retention-days: 7
+          retention-days: 14
 
-      - name: Upload APK size report
-        if: success()
+      - name: Upload build diagnostics
+        if: always()
         uses: actions/upload-artifact@v7
         with:
-          path: ${{ steps.prepare.outputs.project_dir }}/dist/apk-size-report.txt
-          if-no-files-found: error
-          archive: false
+          name: build-diagnostics-B7.17
+          path: dist/ci-build.log
+          if-no-files-found: ignore
           retention-days: 7

@@ -1,0 +1,1 @@
+package android.accessibilityservice;import android.graphics.Path;public class GestureDescription{public static class StrokeDescription{public StrokeDescription(Path p,long s,long d){}}public static class Builder{public Builder addStroke(StrokeDescription s){return this;}public GestureDescription build(){return new GestureDescription();}}}

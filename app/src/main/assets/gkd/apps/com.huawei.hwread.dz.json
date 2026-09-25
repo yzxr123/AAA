@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"action":"clickCenter","matches":"[text*=\"跳过\"][text.length<10][width<500 && height<300][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/15862073"}]}],"id":"com.huawei.hwread.dz","name":"华为阅读"}

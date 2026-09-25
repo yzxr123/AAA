@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":"main.MainActivity","fastQuery":true,"matches":"[vid=\"iv_close_ad\"]","snapshotUrls":"https://i.gkd.li/i/15847732"}]}],"id":"com.hichip.campro","name":"CamHipro"}

@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":3,"name":"全屏广告","rules":[{"activityIds":"com.anythink.basead.ui.ATPortraitTranslucentActivity","exampleUrls":"https://e.gkd.li/3ddc6da8-7bbf-43f8-8d79-1fabe1180fea","fastQuery":true,"matches":"[vid=\"anythink_myoffer_btn_close_id\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/23475779"}]}],"id":"cn.com.yunma.school.app","name":"易校园"}

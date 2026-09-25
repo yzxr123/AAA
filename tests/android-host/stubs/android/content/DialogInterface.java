@@ -1,0 +1,1 @@
+package android.content;public interface DialogInterface{public interface OnCancelListener{void onCancel(DialogInterface d);}interface OnClickListener{void onClick(DialogInterface d,int which);}}

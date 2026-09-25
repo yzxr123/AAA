@@ -1,0 +1,1 @@
+{"groups":[{"desc":"x掉","key":2,"name":"局部广告-顶部横幅","rules":[{"activityIds":"world.letsgo.booster.android.pages.home.HomeActivity","fastQuery":true,"key":0,"matches":"[vid=\"close_update_tip\"][clickable=true]","name":"①横幅更新提示","snapshotUrls":"https://i.gkd.li/i/26395787"}]}],"id":"world.letsgo.booster.android.pro","name":"快连 VPN"}

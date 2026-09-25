@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":"x.activity.HomeActivity","fastQuery":true,"key":0,"matches":"@[text=\"取消\"] < * > [text=\"下载\"]","snapshotUrls":"https://i.gkd.li/i/15856014"}]}],"id":"com.yfoo.listen","name":"聆听音乐"}

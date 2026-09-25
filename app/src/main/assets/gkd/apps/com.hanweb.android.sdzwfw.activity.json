@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"@[clickable=true] > [text*=\"关闭\" || text*=\"跳过\"][text.length<10]","snapshotUrls":["https://i.gkd.li/i/13407227","https://i.gkd.li/i/30527745"]}]}],"id":"com.hanweb.android.sdzwfw.activity","name":"爱山东"}

@@ -1,0 +1,1 @@
+{"groups":[{"key":4,"name":"全屏广告","rules":[{"activityIds":".schedule.ScheduleActivity","fastQuery":true,"matches":"[vid=\"iv_close\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/25769013"}]}],"id":"com.suda.yzune.wakeupschedule","name":"WakeUp课程表"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/080e7f84-c8ac-48b3-ba82-c1dbb795f4f6","fastQuery":true,"matches":"[vid=\"countdown\"]","snapshotUrls":"https://i.gkd.li/i/13236791"}]}],"id":"com.shaoniandream","name":"少年梦阅读"}

@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"全屏广告-基金页面弹窗广告","rules":[{"activityIds":".commonlib.FundHomeActivityV2","exampleUrls":"https://m.gkd.li/57941037/c43d58ab-a18c-4249-bc35-1c7aeab4c3ff","fastQuery":true,"matches":"[vid=\"image_cancel\"]","snapshotUrls":"https://i.gkd.li/i/14163901"}]}],"id":"com.xueqiu.fund","name":"雪球基金"}

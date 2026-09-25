@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"点击关闭","key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".main.MainActivity","exampleUrls":"https://e.gkd.li/539acb69-5c9c-4c4b-9757-d189b6852f89","fastQuery":true,"matches":"[vid=\"ads_cancel\"]","snapshotUrls":"https://i.gkd.li/i/16476928"}]}],"id":"com.hihonor.phoneservice","name":"我的荣耀"}

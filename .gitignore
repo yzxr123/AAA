@@ -1,0 +1,16 @@
+.gradle/
+.idea/
+local.properties
+**/build/
+dist/
+app/src/main/assets/tessdata/chi_sim.traineddata
+
+# Local and generated files
+*.apk
+*.aab
+*.log
+*.iml
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db

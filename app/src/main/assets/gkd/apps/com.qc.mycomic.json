@@ -1,0 +1,1 @@
+{"groups":[{"fastQuery":true,"key":0,"name":"开屏广告","order":-10,"priorityTime":10000,"rules":[{"matches":"@[clickable=true] > [text*=\"跳过\"][text.length<10][width<500 && height<300][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/15443225"}]}],"id":"com.qc.mycomic","name":"MyComic"}

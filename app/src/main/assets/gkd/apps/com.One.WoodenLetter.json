@@ -1,0 +1,1 @@
+{"groups":[{"desc":"x掉","key":1,"name":"局部广告","rules":[{"activityIds":".MainActivity","matches":"ImageView[width>540] + View -> ImageView[width<71] - View[text=null][clickable=true]","snapshotUrls":"https://i.gkd.li/i/25547842"}]}],"id":"com.One.WoodenLetter","name":"一个木函"}

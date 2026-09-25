@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-悬浮广告","rules":[{"activityIds":".listen.book.detail.activity.DetailActivity","fastQuery":true,"key":0,"matches":"[vid=\"closeIcon\"][desc=\"关闭\"]","name":"播放列表-右侧悬浮广告","snapshotUrls":"https://i.gkd.li/i/13348489"}]}],"id":"bubei.tingshu","name":"懒人听书"}

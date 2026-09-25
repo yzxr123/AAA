@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-悬浮广告","rules":[{"activityIds":".MainActivity","fastQuery":true,"key":0,"matches":"[vid=\"ad_iv_close\"]","name":"万年历页面-右侧悬浮广告","snapshotUrls":"https://i.gkd.li/i/13348416"}]}],"id":"com.youloft.calendar","name":"万年历"}

@@ -1,0 +1,1 @@
+{"groups":[{"activityIds":"com.davy.commonlibrary.utils.DialogUtil","key":1,"name":"全屏广告-内部弹窗广告","rules":[{"matches":"[vid=\"exit\"]","snapshotUrls":"https://i.gkd.li/i/12504289"},{"matches":"[vid=\"mimo_interstitial_close_img\"]","snapshotUrls":"https://i.gkd.li/i/12504291"}]}],"id":"com.baidutieba.davy","name":"贴吧一键签到大师"}

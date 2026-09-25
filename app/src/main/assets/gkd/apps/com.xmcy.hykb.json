@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":2,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".app.ui.main.MainActivity","matches":"[vid=\"dialog_home_notice_image_close\"]","snapshotUrls":"https://i.gkd.li/i/13259427"}]}],"id":"com.xmcy.hykb","name":"好游快爆"}

@@ -1,0 +1,1 @@
+{"groups":[{"desc":"点击关闭","key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".ui.activity.PlayActivity","exampleUrls":"https://m.gkd.li/57941037/0a4febc1-9a34-41cb-bbca-63c6723fa228","fastQuery":true,"matches":"[vid=\"iv_close_banner\"]","snapshotUrls":"https://i.gkd.li/i/15531352"}]}],"id":"com.duoduo.child.story","name":"儿歌多多"}

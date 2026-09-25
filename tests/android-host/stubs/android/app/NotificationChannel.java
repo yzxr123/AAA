@@ -1,0 +1,1 @@
+package android.app;public class NotificationChannel{public NotificationChannel(String i,CharSequence s,int v){}public void setDescription(String s){}public void setShowBadge(boolean v){}}

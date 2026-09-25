@@ -1,0 +1,1 @@
+{"groups":[{"desc":"x掉","key":1,"name":"局部广告","rules":[{"activityIds":".GameAct","fastQuery":true,"matches":"@Button[clickable=true] +2 [text=\"广告\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/24967577"}]}],"id":"com.wedobest.shudu","name":"数独"}

@@ -1,0 +1,1 @@
+{"groups":[{"key":2,"name":"全屏广告-弹窗广告","rules":[{"activityIds":".ui.activity.welcome.WelcomeActivity","key":0,"matches":"@[vid=\"iv_close\"] + [vid=\"iv_cover\"]","snapshotUrls":"https://i.gkd.li/i/12883277"}]}],"id":"com.netease.gl","name":"网易大神"}

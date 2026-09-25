@@ -1,0 +1,1 @@
+{"groups":[{"key":2,"name":"局部广告-首页右侧悬浮广告","rules":[{"activityIds":".ui.main.MainActivity","matches":"[vid=\"fl_float\"] + [vid=\"close_image_view\"]","snapshotUrls":"https://i.gkd.li/i/12715291"}]}],"id":"com.maidu.gkld","name":"公考雷达"}

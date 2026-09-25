@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"全屏广告-酷我会员日弹窗","resetMatch":"app","rules":[{"activityIds":".activities.MainActivity","matches":"[vid=\"iv_business_personal_dia_close\"]","snapshotUrls":"https://i.gkd.li/i/13974483"}]}],"id":"cn.kuwo.player","name":"酷我音乐"}

@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-信息流广告","rules":[{"activityIds":"com.baidu.browser.search.LightSearchActivity","key":0,"matches":"[desc=\"ad-logo\"] + [id=\"logo-close-btn\"][clickable=true]","name":"快手广告","snapshotUrls":"https://i.gkd.li/i/13520385"}]}],"id":"com.baidu.searchcraft","name":"简单搜索"}

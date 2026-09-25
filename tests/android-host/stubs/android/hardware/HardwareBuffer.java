@@ -1,0 +1,1 @@
+package android.hardware;public class HardwareBuffer implements AutoCloseable{public static final long USAGE_GPU_SAMPLED_IMAGE=256,USAGE_GPU_COLOR_OUTPUT=512;public void close(){}}

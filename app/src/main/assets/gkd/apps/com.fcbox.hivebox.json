@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".business.main.MainActivity","fastQuery":true,"key":0,"matches":"[vid=\"fl_content_container\"] + [vid=\"iv_close\"]","name":"首页弹窗广告","snapshotUrls":"https://i.gkd.li/i/13459000"}]}],"id":"com.fcbox.hivebox","name":"丰巢管家"}

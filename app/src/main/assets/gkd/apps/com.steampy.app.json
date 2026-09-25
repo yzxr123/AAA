@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"resetMatch":"app","rules":[{"matches":"[vid=\"pyAdLayout\"] > [vid=\"count_down_view\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/26231218"}]}],"id":"com.steampy.app","name":"SteamPY"}

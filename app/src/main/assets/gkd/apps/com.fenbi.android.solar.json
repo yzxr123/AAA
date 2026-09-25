@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":3,"matchTime":10000,"name":"全屏广告-年卡广告","resetMatch":"app","rules":[{"exampleUrls":"https://e.gkd.li/874cdabf-8e49-4c6d-8fd0-48effd6e44e9","matches":"[vid=\"v_firework_close\"]","snapshotUrls":"https://i.gkd.li/i/16759322"}]}],"id":"com.fenbi.android.solar","name":"小猿搜题"}

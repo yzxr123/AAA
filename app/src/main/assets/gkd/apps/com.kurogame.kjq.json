@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"点击关闭","key":2,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".MainActivity","exampleUrls":"https://m.gkd.li/57941037/d9c598fc-5bd4-4773-8db1-316b8f7155c3","fastQuery":true,"matches":"[vid=\"close\"]","snapshotUrls":"https://i.gkd.li/i/15629864"}]}],"id":"com.kurogame.kjq","name":"库街区"}

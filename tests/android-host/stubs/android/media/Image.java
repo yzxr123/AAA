@@ -1,0 +1,1 @@
+package android.media;import android.hardware.HardwareBuffer;public class Image{public HardwareBuffer getHardwareBuffer(){return null;}public void close(){}}

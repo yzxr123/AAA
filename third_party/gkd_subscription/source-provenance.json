@@ -1,0 +1,12 @@
+{
+  "repository": "Lin-arm/GKD_subscription",
+  "repository_url": "https://github.com/Lin-arm/GKD_subscription",
+  "commit": "e9cded29ecc8ccc9919683a79a730826c6bb8cb0",
+  "id": 667,
+  "version": 593,
+  "raw_sha256": "5f71f8dcd9693f3454d5b580ebae50c2fef05e0b0651c65122400d2c2794c7c7",
+  "normalized_sha256": "d7c1f54d84a30ef6b3358a1b3ec7cdc234fee5ddd9100befb7d05003913faef7",
+  "license": "",
+  "conversion": "JSON5 parsed to strict JSON without semantic changes",
+  "retrieved_utc": "2026-09-23"
+}

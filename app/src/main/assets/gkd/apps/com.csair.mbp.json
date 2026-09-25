@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"desc":"点击关闭","key":3,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"activityIds":".CSMBPActivity","exampleUrls":"https://e.gkd.li/c6aeaf1c-e4d6-4b9c-a4bf-ee5b05d2bb30","fastQuery":true,"matches":"[vid=\"close_btn\"]","snapshotUrls":"https://i.gkd.li/i/13197497"}]}],"id":"com.csair.mbp","name":"南方航空"}

@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"全屏广告-首页弹窗广告","resetMatch":"app","rules":[{"activityIds":".main.OperateActivity","matches":"@ImageView[id$=\"iv_back\"][clickable=true]","snapshotUrls":"https://i.gkd.li/i/13749206"}]}],"id":"com.lanjinger.choiassociatedpress","name":"财联社"}

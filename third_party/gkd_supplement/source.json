@@ -1,0 +1,375 @@
+{
+  "schema": 1,
+  "source": "nullptr-leo/gkd-rules jkd-rules.json reviewed app-scoped subset",
+  "globalGroups": [],
+  "apps": [
+    {
+      "id": "info.muge.appshare",
+      "name": "AppShare",
+      "groups": [
+        {
+          "key": 900001,
+          "name": "开屏广告-补充",
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "actionMaximumKey": 0,
+          "rules": [
+            {
+              "key": 0,
+              "anyMatches": [
+                "@View[clickable=true][text=null][visibleToUser=true] + TextView[index=parent.childCount.minus(1)][text=null] <n FrameLayout[childCount>2] >(7,8,9,10) [text*=\"第三方应用\" || text*=\"扭动手机\" || text*=\"点击或上滑\"][visibleToUser=true]",
+                "FrameLayout > FrameLayout[childCount>2] > @View[clickable=true][text=null][visibleToUser=true] + TextView[index=parent.childCount.minus(1)][text=null][visibleToUser=true]"
+              ],
+              "snapshotUrls": [
+                "https://i.gkd.li/i/13842826",
+                "https://i.gkd.li/i/13939089",
+                "https://i.gkd.li/i/14260635"
+              ]
+            },
+            {
+              "key": 1,
+              "fastQuery": true,
+              "matches": "[text*=\"跳过\"][visibleToUser=true][text.length<=10]",
+              "snapshotUrls": "https://i.gkd.li/i/14553551"
+            },
+            {
+              "key": 2,
+              "fastQuery": true,
+              "position": {
+                "left": "width * 0.5",
+                "top": "width * 0.6984"
+              },
+              "matches": "@ViewGroup > [text=\"跳过\"][visibleToUser=true]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/15269380",
+                "https://i.gkd.li/i/15285908",
+                "https://i.gkd.li/i/15520277"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.tencent.mm",
+      "name": "微信",
+      "groups": [
+        {
+          "key": 900002,
+          "name": "全屏广告-小程序-弹窗广告-补充",
+          "desc": "点击右上角关闭",
+          "rules": [
+            {
+              "key": 0,
+              "activityIds": "com.tencent.mm.plugin.appbrand.ui.AppBrandUI",
+              "matches": "[text!=\"\" || text!=null] <<n FrameLayout[childCount<=5] > FrameLayout[childCount>=3 && childCount<=6] + FrameLayout[childCount=2] > TextView + FrameLayout > @FrameLayout[childCount=1] > ImageView",
+              "exampleUrls": "https://m.gkd.li/101449500/1c7e1778-c5a2-426b-8beb-1b76893b6397",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/14111422",
+                "https://i.gkd.li/i/14111432",
+                "https://i.gkd.li/i/13459614"
+              ]
+            }
+          ],
+          "enable": true
+        }
+      ]
+    },
+    {
+      "id": "tv.danmaku.bili",
+      "name": "哔哩哔哩",
+      "groups": [
+        {
+          "key": 900003,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "matches": "[vid=\"count_down\" || vid=\"skip\"][visibleToUser=true]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/16187624",
+                "https://i.gkd.li/i/16484445"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.douban.frodo",
+      "name": "豆瓣",
+      "groups": [
+        {
+          "key": 900004,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "actionMaximumKey": 0,
+          "rules": [
+            {
+              "key": 0,
+              "matches": "FrameLayout > FrameLayout[childCount>2] > @View[clickable=true][visibleToUser=true] + TextView[text=null] <<n [id=\"android:id/content\"]",
+              "snapshotUrls": "https://i.gkd.li/i/15981630"
+            },
+            {
+              "key": 1,
+              "position": {
+                "left": "width * 0.8833",
+                "top": "width * 0.1388"
+              },
+              "excludeMatches": "[id=\"com.douban.frodo:id/_ad_image_\"][width=1200]",
+              "matches": "[id=\"com.douban.frodo:id/_ad_image_\"]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/13575257",
+                "https://i.gkd.li/i/13575547"
+              ]
+            },
+            {
+              "key": 2,
+              "position": {
+                "left": "width * 0.8666",
+                "top": "width * 0.1625"
+              },
+              "matches": "[id=\"com.douban.frodo:id/_ad_image_\"][width=1200]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/13601755",
+                "https://i.gkd.li/i/16054268"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.autonavi.minimap",
+      "name": "高德地图",
+      "groups": [
+        {
+          "key": 900005,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "matches": "[text*=\"跳过\"][text.length<10][visibleToUser=true]",
+              "exampleUrls": "https://e.gkd.li/983cc392-1b01-4172-bc1d-2df001baeb3d",
+              "snapshotUrls": "https://i.gkd.li/i/16490985"
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.jingdong.app.mall",
+      "name": "京东",
+      "groups": [
+        {
+          "key": 900006,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "excludeActivityIds": "com.jd.lib.search.view.Activity.SearchActivity",
+              "matches": "[text*=\"跳过\"][text.length<10][visibleToUser=true]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/16323111",
+                "https://i.gkd.li/i/16323115"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.coolapk.market",
+      "name": "酷安",
+      "groups": [
+        {
+          "key": 900007,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "actionMaximumKey": 0,
+          "excludeActivityIds": [
+            "com.coolapk.market.view.search.",
+            "com.coolapk.market.view.feed."
+          ],
+          "rules": [
+            {
+              "key": 0,
+              "matches": "FrameLayout > FrameLayout[childCount>2] > @View[clickable=true][visibleToUser=true] + TextView[text=null] <<n [id=\"android:id/content\"]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/12503773",
+                "https://i.gkd.li/i/13247610",
+                "https://i.gkd.li/i/13264779",
+                "https://i.gkd.li/i/13826359",
+                "https://i.gkd.li/i/13827095"
+              ]
+            },
+            {
+              "key": 1,
+              "matches": "[text^=\"跳过\"][text.length<=4]",
+              "excludeMatches": "[id=\"com.coolapk.market:id/item_view\"]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/12917990",
+                "https://i.gkd.li/i/13211392",
+                "https://i.gkd.li/i/13247733",
+                "https://i.gkd.li/i/13247782",
+                "https://i.gkd.li/i/13296816"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.fan.app",
+      "name": "十六番旅行",
+      "groups": [
+        {
+          "key": 900008,
+          "name": "开屏广告-补充",
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "fastQuery": true,
+              "matches": "FrameLayout > FrameLayout[childCount>2] > @View[clickable=true][visibleToUser=true] + TextView[text=null] <<n [id=\"android:id/content\"]",
+              "exampleUrls": "https://m.gkd.li/57941037/470c6262-62ca-45c5-908c-8435d7b0e86f",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/14596657",
+                "https://i.gkd.li/i/13258011"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.tencent.qqlive",
+      "name": "腾讯视频",
+      "groups": [
+        {
+          "key": 900009,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "key": 0,
+              "action": "clickCenter",
+              "matches": "TextView[text*=\"跳过\"][text.length<=10]",
+              "snapshotUrls": "https://i.gkd.li/i/14049316"
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.netease.cloudmusic",
+      "name": "网易云音乐",
+      "groups": [
+        {
+          "key": 900010,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "rules": [
+            {
+              "key": 0,
+              "excludeActivityIds": "com.netease.cloudmusic.music.biz.setting.activity.SettingActivity",
+              "matches": "[text*=\"跳过\"][text.length<10][visibleToUser=true]",
+              "snapshotUrls": [
+                "https://i.gkd.li/i/15092772",
+                "https://i.gkd.li/i/15092814"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    },
+    {
+      "id": "com.tencent.mobileqq",
+      "name": "QQ",
+      "groups": [
+        {
+          "key": 900011,
+          "name": "开屏广告-补充",
+          "fastQuery": true,
+          "matchTime": 10000,
+          "actionMaximum": 1,
+          "resetMatch": "app",
+          "excludeActivityIds": [
+            "com.tencent.mobileqq.activity.ChatActivity",
+            "com.tencent.mobileqq.search.activity.UniteSearchActivity"
+          ],
+          "rules": {
+            "excludeMatches": "[vid=\"root\"]",
+            "matches": "TextView[text^=\"跳过\"][text.length<=10][vid!=\"title\"]",
+            "snapshotUrls": [
+              "https://i.gkd.li/i/13093155",
+              "https://i.gkd.li/i/13207731",
+              "https://i.gkd.li/i/13217807",
+              "https://i.gkd.li/i/13856647",
+              "https://i.gkd.li/i/13868177",
+              "https://i.gkd.li/i/14341023",
+              "https://i.gkd.li/i/15334565"
+            ]
+          },
+          "order": -10
+        },
+        {
+          "key": 900012,
+          "name": "开屏广告-QQ小程序开屏广告-补充",
+          "desc": "点击右下角跳过",
+          "actionMaximum": 1,
+          "activityIds": [
+            "com.tencent.mobileqq.mini.appbrand.ui.AppBrandUI",
+            "com.tencent.mobileqq.activity.miniaio.MiniChatActivity"
+          ],
+          "rules": [
+            {
+              "matches": [
+                "[text=\"广告\"][visibleToUser=true]",
+                "[text=\"跳过\"][visibleToUser=true]"
+              ],
+              "snapshotUrls": [
+                "https://i.gkd.li/i/12877215",
+                "https://i.gkd.li/i/12919195",
+                "https://i.gkd.li/i/15130235"
+              ]
+            }
+          ],
+          "order": -10
+        }
+      ]
+    }
+  ]
+}

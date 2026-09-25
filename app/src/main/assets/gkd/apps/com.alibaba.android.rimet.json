@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"局部广告-消息列表上方广告","resetMatch":"app","rules":[{"key":0,"matches":"@FrameLayout > [vid=\"icft_close\"]","snapshotUrls":"https://i.gkd.li/i/13325125"}]}],"id":"com.alibaba.android.rimet","name":"钉钉"}

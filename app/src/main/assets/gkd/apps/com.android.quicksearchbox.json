@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":1,"matchTime":10000,"name":"局部广告-卡片广告","resetMatch":"app","rules":[{"activityIds":".SearchActivityTransparent","matches":"[vid=\"ad_close\"]","snapshotUrls":"https://i.gkd.li/i/13897834"}]}],"id":"com.android.quicksearchbox","name":"搜索"}

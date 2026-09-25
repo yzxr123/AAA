@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"matches":"[vid=\"jump_view\"]","snapshotUrls":"https://i.gkd.li/i/13071523"}]}],"id":"com.shanghaionstar","name":"安吉星"}

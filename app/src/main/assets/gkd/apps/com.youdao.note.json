@@ -1,0 +1,1 @@
+{"groups":[{"key":1,"name":"局部广告-卡片广告","rules":[{"activityIds":".activity2.MainActivity","fastQuery":true,"key":1,"matches":"[vid=\"recycle_view\"] + [vid=\"close_ad\"]","name":"首页上方卡片广告","snapshotUrls":"https://i.gkd.li/i/13379524"}]}],"id":"com.youdao.note","name":"有道云笔记"}

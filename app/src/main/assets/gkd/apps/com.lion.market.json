@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":1,"matchTime":10000,"name":"全屏广告","resetMatch":"app","rules":[{"activityIds":".app.MainActivity","exampleUrls":"https://e.gkd.li/6e29aaa4-1a01-4422-8379-24140a4ffed5","fastQuery":true,"matches":"[vid=\"dlg_main_ad_close\"][visibleToUser=true]","snapshotUrls":"https://i.gkd.li/i/23784776"}]}],"id":"com.lion.market","name":"虫虫助手"}

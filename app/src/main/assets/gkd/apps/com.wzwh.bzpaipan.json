@@ -1,0 +1,1 @@
+{"groups":[{"key":3,"name":"全屏广告","rules":[{"activityIds":"com.qq.e.ads.PortraitADActivity","fastQuery":true,"matches":"@ImageView[clickable=true] < LinearLayout[childCount=1] <2 FrameLayout[childCount=2] < [id=\"android:id/content\"][childCount=1]","snapshotUrls":"https://i.gkd.li/i/13162912"}]}],"id":"com.wzwh.bzpaipan","name":"问真八字排盘"}

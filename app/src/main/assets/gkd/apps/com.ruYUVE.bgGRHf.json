@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"key":0,"matchTime":10000,"name":"开屏广告","order":-10,"priorityTime":10000,"resetMatch":"app","rules":[{"action":"clickCenter","forcedTime":10000,"matches":"[desc=\"关闭广告\"]","snapshotUrls":"https://i.gkd.li/i/14667107"}]}],"id":"com.ruYUVE.bgGRHf","name":"水果派"}

@@ -1,0 +1,1 @@
+package android.app;public class ApplicationExitInfo{public int getPid(){return 0;}public long getTimestamp(){return 0;}public int getReason(){return 0;}public int getStatus(){return 0;}}

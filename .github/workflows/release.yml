@@ -1,0 +1,125 @@
+name: Publish GitHub Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release 标签，例如 v0.7.17-b7.17'
+        required: true
+        type: string
+      replace_existing:
+        description: '删除同名 Release 后重新发布（保留标签）'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: version
+        shell: bash
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          TAG="${INPUT_TAG:-$GITHUB_REF_NAME}"
+          VERSION=$(sed -n "s/.*versionName = '\([^']*\)'.*/\1/p" app/build.gradle)
+          [[ "$TAG" == "v$VERSION" ]] || {
+            echo "Tag $TAG does not match versionName $VERSION" >&2
+            exit 1
+          }
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          verify-signature: true
+
+      - name: Setup Gradle 9.4.1
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.4.1'
+          cache-provider: basic
+
+      - name: Install Android SDK
+        run: |
+          set -euo pipefail
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37" \
+            "build-tools;36.0.0"
+
+      - name: Validate, test, lint and build
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/fetch_ocr_data.py
+          python3 tools/validate_project.py
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+          gradle \
+            :gkd-core:verifyGkdRuntime \
+            :gkd-core:verifyAndroidHost \
+            :app:lintRelease \
+            :app:assembleRelease \
+            --no-daemon \
+            --stacktrace \
+            --console=plain
+
+      - name: Verify and package APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp app/build/outputs/apk/release/app-release.apk dist/Qunideguanggao-B7.17.apk
+          BYTES=$(stat -c%s dist/Qunideguanggao-B7.17.apk)
+          [[ "$BYTES" -le 52428800 ]] || { echo 'APK exceeds 50 MiB' >&2; exit 1; }
+          "$ANDROID_SDK_ROOT/build-tools/36.0.0/apksigner" verify \
+            --verbose \
+            --print-certs \
+            dist/Qunideguanggao-B7.17.apk | tee dist/apksigner-report.txt
+          (cd dist && sha256sum Qunideguanggao-B7.17.apk > SHA256SUMS.txt)
+
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          REPLACE_EXISTING: ${{ inputs.replace_existing }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [[ "$REPLACE_EXISTING" == 'true' ]]; then
+              gh release delete "$TAG" --yes
+            else
+              echo "Release $TAG already exists" >&2
+              exit 1
+            fi
+          fi
+          gh release create "$TAG" \
+            dist/Qunideguanggao-B7.17.apk \
+            dist/SHA256SUMS.txt \
+            dist/apksigner-report.txt \
+            THIRD_PARTY_NOTICES.md \
+            --target "$GITHUB_SHA" \
+            --title "去你的广告 ${TAG#v}" \
+            --generate-notes \
+            --latest

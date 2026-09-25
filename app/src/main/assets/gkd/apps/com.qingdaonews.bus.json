@@ -1,0 +1,1 @@
+{"groups":[{"actionMaximum":1,"fastQuery":true,"key":0,"matchTime":10000,"name":"全屏广告-弹窗广告","resetMatch":"app","rules":[{"matches":"[vid=\"iv_native_dislike\"]","snapshotUrls":"https://i.gkd.li/i/13467193"}]}],"id":"com.qingdaonews.bus","name":"青岛公交查询"}
