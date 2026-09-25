@@ -39,9 +39,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # compileSdk 37; older project notes called this platforms;android-37.0.
-          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 \
-            "platforms;android-37" \
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37.0" \
             "build-tools;36.0.0"
 
       - name: Validate source and rules

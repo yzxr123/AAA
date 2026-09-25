@@ -64,8 +64,8 @@ jobs:
       - name: Install Android SDK
         run: |
           set -euo pipefail
-          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 \
-            "platforms;android-37" \
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37.0" \
             "build-tools;36.0.0"
 
       - name: Validate, test, lint and build
